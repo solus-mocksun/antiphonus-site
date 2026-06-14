@@ -3,165 +3,412 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>the fool</title>
+  <title>Antiphonus — The Fool</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .home-wrap {
-      max-width: 680px;
-      padding: 3.5rem 3rem 6rem;
+    /* ── HEADER NAV ── */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 56px;
+      background: rgba(26,26,26,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-logo {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+    }
+
+    .header-logo span { color: var(--accent-2); }
+
+    .header-nav {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .header-nav a {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.12s;
+    }
+
+    .header-nav a:hover { color: var(--white); text-decoration: none; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 56px 2.5rem 4rem;
+      max-width: 860px;
       margin: 0 auto;
     }
 
-    .home-title-row { margin-bottom: 1.25rem; }
-
-    .home-tagline {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 2rem;
+    .hero-eyebrow {
       font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent-2);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
     }
 
-    .home-nav {
-      margin-top: 3rem;
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title em {
+      color: var(--accent-2);
+      font-style: normal;
+    }
+
+    .hero-quote {
+      font-size: 1rem;
+      color: var(--muted);
+      font-style: italic;
+      border-left: 2px solid var(--accent);
+      padding-left: 1.25rem;
+      margin: 0 0 1.25rem;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .hero-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.65rem 1.6rem;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 0.82rem;
+      font-family: var(--mono);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: background 0.15s, color 0.15s;
+      border: 1px solid var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-2);
+      border-color: var(--accent-2);
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 0.65rem 1.6rem;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-family: var(--mono);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--border);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .btn-ghost:hover {
+      color: var(--white);
+      border-color: var(--border2);
+      text-decoration: none;
+    }
+
+    /* ── DIVIDER LINE ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent-2);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .section-heading {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-body {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── NAV GRID (explore) ── */
+    .nav-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
     }
 
-    .home-nav-item {
+    .nav-card {
       display: block;
       background: var(--bg-2);
-      padding: 1.1rem 1.25rem;
+      padding: 1.5rem 1.4rem;
       text-decoration: none;
-      transition: background 0.12s;
       border-left: 2px solid transparent;
+      transition: background 0.12s, border-color 0.12s;
     }
 
-    .home-nav-item:hover {
+    .nav-card:hover {
       background: var(--bg-hover);
       border-left-color: var(--accent);
       text-decoration: none;
     }
 
-    .nav-label {
-      font-size: 0.6rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
+    .nav-card-label {
       font-family: var(--mono);
-      margin-bottom: 0.3rem;
+      font-size: 0.58rem;
+      color: var(--faint);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
     }
 
-    .nav-title {
-      font-size: 0.9rem;
+    .nav-card-title {
+      font-size: 0.95rem;
       color: var(--white);
-      font-weight: 500;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
     }
 
-    .nav-sub {
-      font-size: 0.72rem;
+    .nav-card-sub {
+      font-size: 0.75rem;
       color: var(--muted);
-      margin-top: 0.2rem;
+      line-height: 1.5;
     }
 
-    .home-meta {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
+    /* ── PREMISE BLOCK ── */
+    .premise-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .premise-cell {
+      background: var(--bg-2);
+      padding: 1.5rem;
+    }
+
+    .premise-key {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--faint);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .premise-val {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .premise-val strong { color: var(--accent-2); font-weight: 600; }
+
+    /* ── FOOTER ── */
+    .site-footer {
       border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
       display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
       align-items: center;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--faint);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .footer-wip {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 640px) {
+      .hero-title { font-size: 2.8rem; }
+      .premise-grid { grid-template-columns: 1fr; }
+      .site-header { padding: 0 1.25rem; }
+      .hero, .section { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .header-nav { gap: 1.25rem; }
+      .site-footer { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-<div class="vsc-tabs">
-  <a href="index.html"      class="vsc-tab active"><span class="tab-icon">◈</span>overview</a>
-  <a href="characters.html" class="vsc-tab"><span class="tab-icon">◈</span>characters</a>
-  <a href="story.html"      class="vsc-tab"><span class="tab-icon">◈</span>story</a>
-  <a href="gallery.html"    class="vsc-tab"><span class="tab-icon">◈</span>gallery</a>
-  <a href="world.html"      class="vsc-tab"><span class="tab-icon">◈</span>world</a>
-</div>
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <a href="index.html" class="header-logo">anti<span>·</span>phonus</a>
+  <nav>
+    <ul class="header-nav">
+      <li><a href="characters.html">characters</a></li>
+      <li><a href="story.html">story</a></li>
+      <li><a href="gallery.html">gallery</a></li>
+      <li><a href="world.html">world</a></li>
+    </ul>
+  </nav>
+</header>
 
-<div class="vsc-bread">
-  <a href="index.html" class="bread-item">the fool</a>
-  <span class="bread-sep">›</span>
-  <span class="bread-item">overview</span>
-</div>
-
-<main class="page">
-<div class="home-wrap">
-
-  <div class="home-title-row">
-    <span class="site-title">The Fool</span>
-  </div>
-
-  <p class="home-tagline">// The first thing they take from you is your death.<br>// The second is your time.</p>
-
-  <p>Beyond death waits a world of unfinished people.</p>
-
-  <blockquote>
+<!-- ── HERO ── -->
+<section class="hero">
+  <p class="hero-eyebrow">a novel in progress</p>
+  <h1 class="hero-title">The <em>Fool</em></h1>
+  <blockquote class="hero-quote">
     "If this is hell, why does it let us leave?"
   </blockquote>
+  <p class="hero-sub">
+    Beyond death waits a world of unfinished people.
+    The first thing they take from you is your death.
+    The second is your time.
+  </p>
+  <div class="hero-actions">
+    <a href="story.html" class="btn-primary">read the story</a>
+    <a href="characters.html" class="btn-ghost">meet the cast</a>
+  </div>
+</section>
 
-  <nav class="home-nav">
-    <a href="characters.html" class="home-nav-item">
-      <div class="nav-label">characters</div>
-      <div class="nav-title">Anti &amp; Nyx</div>
-      <div class="nav-sub">reference sheets, stats, dynamics</div>
-    </a>
-    <a href="story.html" class="home-nav-item">
-      <div class="nav-label">story</div>
-      <div class="nav-title">The Chapters</div>
-      <div class="nav-sub">the actual writing, as it exists</div>
-    </a>
-    <a href="gallery.html" class="home-nav-item">
-      <div class="nav-label">gallery</div>
-      <div class="nav-title">Concept Art</div>
-      <div class="nav-sub">illustrations &amp; visual reference</div>
-    </a>
-    <a href="world.html" class="home-nav-item">
-      <div class="nav-label">world</div>
-      <div class="nav-title">The Game</div>
-      <div class="nav-sub">rules, stages, cities, lore</div>
-    </a>
-  </nav>
+<hr class="section-divider" />
 
-  <div class="home-meta">
-    <div class="wip-badge">
-      <div class="wip-glow"></div>
-      work in progress
+<!-- ── PREMISE ── -->
+<section class="section">
+  <span class="section-label">premise</span>
+  <h2 class="section-heading">What is Antiphonus?</h2>
+  <p class="section-body">
+    A death game played by the dead — structured like tarot, scored like a dungeon crawl,
+    written like a novel. Anti and Nyx navigate twenty-two stages together,
+    each one named for a Major Arcana.
+  </p>
+
+  <div class="premise-grid">
+    <div class="premise-cell">
+      <div class="premise-key">genre</div>
+      <div class="premise-val"><strong>dark fantasy</strong> · death game · character study</div>
     </div>
-    <span class="dim mono" style="font-size:0.72rem">last updated <span id="lastmod"></span></span>
+    <div class="premise-cell">
+      <div class="premise-key">structure</div>
+      <div class="premise-val"><strong>22 stages</strong> · Major Arcana · M00 → M21</div>
+    </div>
+    <div class="premise-cell">
+      <div class="premise-key">protagonists</div>
+      <div class="premise-val"><strong>Anti &amp; Nyx</strong> · rivals, partners, something else</div>
+    </div>
+    <div class="premise-cell">
+      <div class="premise-key">status</div>
+      <div class="premise-val"><strong>M00 — The Fool</strong> · actively writing</div>
+    </div>
   </div>
+</section>
 
-</div>
-</main>
+<hr class="section-divider" />
 
-<div class="vsc-status">
-  <div class="status-left">
-    <span class="status-item mono">⎇ main</span>
+<!-- ── EXPLORE ── -->
+<section class="section">
+  <span class="section-label">explore</span>
+  <h2 class="section-heading">Sections</h2>
+  <p class="section-body">Everything about Antiphonus in one place.</p>
+
+  <div class="nav-grid">
+    <a href="characters.html" class="nav-card">
+      <div class="nav-card-label">characters</div>
+      <div class="nav-card-title">Anti &amp; Nyx</div>
+      <div class="nav-card-sub">Reference sheets, stats, and dynamics</div>
+    </a>
+    <a href="story.html" class="nav-card">
+      <div class="nav-card-label">story</div>
+      <div class="nav-card-title">The Chapters</div>
+      <div class="nav-card-sub">The actual writing, as it exists</div>
+    </a>
+    <a href="gallery.html" class="nav-card">
+      <div class="nav-card-label">gallery</div>
+      <div class="nav-card-title">Concept Art</div>
+      <div class="nav-card-sub">Illustrations and visual reference</div>
+    </a>
+    <a href="world.html" class="nav-card">
+      <div class="nav-card-label">world</div>
+      <div class="nav-card-title">The Game</div>
+      <div class="nav-card-sub">Rules, stages, cities, lore</div>
+    </a>
   </div>
-  <div class="status-right">
-    <span class="status-item mono">novel · death game</span>
-    <span class="status-item mono">© <span id="yr"></span></span>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="footer-wip">
+    <div class="wip-glow"></div>
+    <span>work in progress · <span id="lastmod"></span></span>
   </div>
-</div>
+  <span>© <span id="yr"></span> · antiphonus</span>
+</footer>
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
-
   const d = new Date(document.lastModified);
   const pad = n => String(n).padStart(2, '0');
   document.getElementById('lastmod').textContent =
     d.getFullYear() + ' · ' +
     d.toLocaleString('en', { month: 'short' }).toLowerCase() + ' · ' +
-    pad(d.getDate()) + ' · ' +
-    pad(d.getHours()) + ':' + pad(d.getMinutes());
+    pad(d.getDate());
 </script>
 </body>
 </html>
