@@ -299,7 +299,7 @@
 
 <!-- ── HEADER ── -->
 <header class="site-header">
-  <a href="index.html" class="header-logo">anti<span>·</span>phonus</a>
+  <a href="index.html" class="header-logo">antiphonus</a>
   <nav>
     <ul class="header-nav">
       <li><a href="characters.html">characters</a></li>
@@ -396,9 +396,9 @@
 <footer class="site-footer">
   <div class="footer-wip">
     <div class="wip-glow"></div>
-    <span>work in progress · <span id="lastmod"></span></span>
+    <span>work in progress · last updated: <span id="lastmod"></span></span>
   </div>
-  <span>© <span id="yr"></span> · antiphonus</span>
+  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
 </footer>
 
 <script>
@@ -406,9 +406,10 @@
   const d = new Date(document.lastModified);
   const pad = n => String(n).padStart(2, '0');
   document.getElementById('lastmod').textContent =
-    d.getFullYear() + ' · ' +
-    d.toLocaleString('en', { month: 'short' }).toLowerCase() + ' · ' +
-    pad(d.getDate());
+    d.getFullYear() + ' ' +
+    d.toLocaleString('en', { month: 'short' }).toLowerCase() + ' ' +
+    pad(d.getDate()) + ' ' +
+    pad(d.getHours()) + ':' + pad(d.getMinutes());
 </script>
 </body>
 </html>
