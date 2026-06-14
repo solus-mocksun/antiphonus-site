@@ -19,11 +19,11 @@
   --faint:       #4e4e4e;
   --white:       #efefef;
 
-  /* Obsidian accent — purple */
-  --accent:      #7c3aed;
-  --accent-2:    #9d5cf0;
-  --accent-dim:  rgba(124,58,237,0.15);
-  --link:        #a78bfa;
+  /* Accent — gray-red */
+  --accent:      #8b3a3a;
+  --accent-2:    #a85252;
+  --accent-dim:  rgba(139,58,58,0.15);
+  --link:        #c48080;
 
   /* Highlight colors (used sparingly) */
   --amber:       #e8a94a;
