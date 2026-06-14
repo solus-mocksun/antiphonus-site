@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>characters — the fool</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Dual stats section */
+    .dual-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-top: none;
+    }
+
+    .dual-col {
+      padding: 1.25rem 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .dual-col:last-child { border-right: none; }
+
+    /* Slider section */
+    .slider-wrap {
+      border: 1px solid var(--border);
+      border-top: none;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .slider-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      margin-bottom: 1rem;
+      font-family: var(--mono);
+      color: var(--muted);
+    }
+
+    /* Relationship section */
+    .rel-wrap {
+      border: 1px solid var(--border);
+      border-top: none;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .rel-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+
+    .rtag {
+      font-size: 0.62rem;
+      color: var(--faint);
+      border: 1px solid var(--border);
+      padding: 0.12rem 0.55rem;
+      font-family: var(--mono);
+      border-radius: 2px;
+    }
+
+    .rtag.on {
+      color: var(--link);
+      border-color: rgba(124,58,237,0.4);
+      background: var(--accent-dim);
+    }
+
+    /* Speech bubbles */
+    .speech-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .speech {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      padding: 0.9rem 1rem;
+    }
+
+    .speech-from {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      margin-bottom: 0.5rem;
+      display: block;
+      color: var(--muted);
+    }
+
+    .speech-text { font-size: 0.83rem; color: var(--text); font-style: italic; line-height: 1.8; }
+
+    /* NPC header row */
+    .npc-header-row {
+      display: grid;
+      grid-template-columns: 60px 180px 1fr auto;
+      gap: 1rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border2);
+      font-size: 0.6rem;
+      color: var(--faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+    }
+
+    /* Section label inside CP sheet */
+    .cp-sec {
+      font-size: 0.6rem;
+      color: var(--accent-2);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      padding: 0.6rem 0 0.35rem;
+      margin-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+
+    /* bubble color overrides per character */
+    .bubble-nyx .bubbles-fill { color: var(--amber); }
+
+    @media (max-width: 780px) {
+      .cp-grid, .dual-stats { grid-template-columns: 1fr; }
+      .cp-col  { border-right: none; border-bottom: 1px solid var(--border); }
+      .dual-col { border-right: none; border-bottom: 1px solid var(--border); }
+      .sl-row  { grid-template-columns: 70px 1fr 70px; }
+      .speech-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .cp-portrait-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="vsc-tabs">
+  <a href="index.html"      class="vsc-tab"><span class="tab-icon">◈</span>overview</a>
+  <a href="characters.html" class="vsc-tab active"><span class="tab-icon">◈</span>characters</a>
+  <a href="story.html"      class="vsc-tab"><span class="tab-icon">◈</span>story</a>
+  <a href="gallery.html"    class="vsc-tab"><span class="tab-icon">◈</span>gallery</a>
+  <a href="world.html"      class="vsc-tab"><span class="tab-icon">◈</span>world</a>
+</div>
+
+<div class="vsc-bread">
+  <a href="index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <a href="characters.html" class="bread-item">characters</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item" id="breadLeaf">main cast</span>
+</div>
+
+<main class="page">
+<div class="wrap" style="padding-top:1.5rem;">
+
+  <div class="inner-tabs">
+    <button class="inner-tab active" onclick="switchTab('main',this)">Main Cast</button>
+    <button class="inner-tab"        onclick="switchTab('npc', this)">Supporting</button>
+  </div>
+
+  <!-- ══════════ MAIN CAST ══════════ -->
+  <div class="tab-panel active" id="tab-main">
+
+    <p class="dim mono" style="font-size:0.72rem;margin-bottom:1.25rem">// FILE #001 — ANTIPHONUS RIVIS &nbsp;|&nbsp; FILE #002 — NYX ATONAL</p>
+
+    <!-- ── CP sheet grid ── -->
+    <div class="cp-grid">
+
+      <!-- LEFT: ANTI -->
+      <div class="cp-col">
+        <div class="cp-name">Antiphonus Rivis</div>
+        <div class="cp-sub">anti · #001 · 19 · male</div>
+
+        <div class="cp-portrait-row">
+          <div>
+            <div class="cp-portrait">
+              <!-- <img src="art/anti-portrait.jpg" alt="Anti"> -->
+              portrait
+            </div>
+            <div class="cp-ref-strip">
+              <div class="cp-ref"><!-- <img src="art/anti-ref1.jpg"> -->ref</div>
+              <div class="cp-ref">ref</div>
+            </div>
+          </div>
+
+          <table class="field-table">
+            <tr><td class="f-key">name</td>    <td class="f-colon">:</td><td class="f-val">Antiphonus Rivis</td></tr>
+            <tr><td class="f-key">alias</td>   <td class="f-colon">:</td><td class="f-val">Anti</td></tr>
+            <tr><td class="f-key">age</td>     <td class="f-colon">:</td><td class="f-val accent">19</td></tr>
+            <tr><td class="f-key">gender</td>  <td class="f-colon">:</td><td class="f-val">male</td></tr>
+            <tr><td class="f-key">status</td>  <td class="f-colon">:</td><td class="f-val">dead / in-game</td></tr>
+            <tr><td class="f-key">height</td>  <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">build</td>   <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">hair</td>    <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">eyes</td>    <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">faction</td> <td class="f-colon">:</td><td class="f-val dim">none</td></tr>
+          </table>
+        </div>
+
+        <span class="cp-sec">palette</span>
+        <div class="swatch-row">
+          <div class="swatch" title="#f5ece9" data-hex="#f5ece9" onclick="copyHex(this)" style="background:#f5ece9"></div>
+          <div class="swatch" title="#2a2a2a" data-hex="#2a2a2a" onclick="copyHex(this)" style="background:#2a2a2a"></div>
+          <div class="swatch" title="#ebebeb" data-hex="#ebebeb" onclick="copyHex(this)" style="background:#ebebeb"></div>
+          <div class="swatch" title="#888888" data-hex="#888888" onclick="copyHex(this)" style="background:#888888"></div>
+          <div class="swatch" title="#8a4a44" data-hex="#8a4a44" onclick="copyHex(this)" style="background:#8a4a44"></div>
+        </div>
+
+        <span class="cp-sec">catchphrase</span>
+        <p class="dim" style="font-size:0.82rem;font-style:italic;margin:0">— fill in —</p>
+      </div>
+
+      <!-- RIGHT: NYX -->
+      <div class="cp-col">
+        <div class="cp-name">Nyx Atonal</div>
+        <div class="cp-sub">nyx · #002 · 22 (died 17) · male · 5yr in-game</div>
+
+        <div class="cp-portrait-row">
+          <div>
+            <div class="cp-portrait">
+              <!-- <img src="art/nyx-portrait.jpg" alt="Nyx"> -->
+              portrait
+            </div>
+            <div class="cp-ref-strip">
+              <div class="cp-ref">ref</div>
+              <div class="cp-ref">ref</div>
+            </div>
+          </div>
+
+          <table class="field-table">
+            <tr><td class="f-key">name</td>    <td class="f-colon">:</td><td class="f-val">Nyx Atonal</td></tr>
+            <tr><td class="f-key">alias</td>   <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">age</td>     <td class="f-colon">:</td><td class="f-val amber">22 <span class="dim">(died 17)</span></td></tr>
+            <tr><td class="f-key">gender</td>  <td class="f-colon">:</td><td class="f-val">male</td></tr>
+            <tr><td class="f-key">status</td>  <td class="f-colon">:</td><td class="f-val">dead / 5yr in-game</td></tr>
+            <tr><td class="f-key">height</td>  <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">build</td>   <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">hair</td>    <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">eyes</td>    <td class="f-colon">:</td><td class="f-val dim">—</td></tr>
+            <tr><td class="f-key">rank</td>    <td class="f-colon">:</td><td class="f-val amber">top 5 / all cities</td></tr>
+          </table>
+        </div>
+
+        <span class="cp-sec">palette</span>
+        <div class="swatch-row">
+          <div class="swatch" title="#2a2a2a" data-hex="#2a2a2a" onclick="copyHex(this)" style="background:#2a2a2a"></div>
+          <div class="swatch" title="#e3d0ca" data-hex="#e3d0ca" onclick="copyHex(this)" style="background:#e3d0ca"></div>
+          <div class="swatch" title="#3d5268" data-hex="#3d5268" onclick="copyHex(this)" style="background:#3d5268"></div>
+        </div>
+
+        <span class="cp-sec">catchphrase</span>
+        <p class="dim" style="font-size:0.82rem;font-style:italic;margin:0">— fill in —</p>
+      </div>
+
+    </div><!-- /cp-grid -->
+
+    <!-- Stats (dual column) -->
+    <div class="dual-stats">
+      <div class="dual-col">
+        <p class="dim mono" style="font-size:0.68rem;margin-bottom:0.75rem">physical</p>
+        <div class="bubble-row"><span class="bubble-key">strength</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●</span><span class="bubbles-empty">○○○</span></div>
+        <div class="bubble-row"><span class="bubble-key">agility</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●</span><span class="bubbles-empty">○○</span></div>
+        <div class="bubble-row"><span class="bubble-key">endurance</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●</span><span class="bubbles-empty">○○</span></div>
+        <div class="bubble-row"><span class="bubble-key">vitality</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●</span><span class="bubbles-empty">○○</span></div>
+        <div class="bubble-row"><span class="bubble-key">appearance</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●</span><span class="bubbles-empty">○○</span></div>
+        <p class="dim mono" style="font-size:0.68rem;margin:0.75rem 0">mental</p>
+        <div class="bubble-row"><span class="bubble-key">intelligence</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●●</span></div>
+        <div class="bubble-row"><span class="bubble-key">perception</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●●</span></div>
+        <div class="bubble-row"><span class="bubble-key">composure</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●</span><span class="bubbles-empty">○</span></div>
+        <div class="bubble-row"><span class="bubble-key">empathy</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●</span><span class="bubbles-empty">○○</span></div>
+        <div class="bubble-row"><span class="bubble-key">luck</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●</span><span class="bubbles-empty">○○○</span></div>
+        <p class="dim mono" style="font-size:0.62rem;margin-top:0.6rem">anti</p>
+      </div>
+
+      <div class="dual-col bubble-nyx">
+        <p class="dim mono" style="font-size:0.68rem;margin-bottom:0.75rem">physical</p>
+        <div class="bubble-row"><span class="bubble-key">strength</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●</span><span class="bubbles-empty">○</span></div>
+        <div class="bubble-row"><span class="bubble-key">agility</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●</span><span class="bubbles-empty">○</span></div>
+        <div class="bubble-row"><span class="bubble-key">endurance</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●</span><span class="bubbles-empty">○</span></div>
+        <div class="bubble-row"><span class="bubble-key">vitality</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●</span><span class="bubbles-empty">○</span></div>
+        <div class="bubble-row"><span class="bubble-key">appearance</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●</span><span class="bubbles-empty">○</span></div>
+        <p class="dim mono" style="font-size:0.68rem;margin:0.75rem 0">mental</p>
+        <div class="bubble-row"><span class="bubble-key">intelligence</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●</span><span class="bubbles-empty">○</span></div>
+        <div class="bubble-row"><span class="bubble-key">perception</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●●</span></div>
+        <div class="bubble-row"><span class="bubble-key">composure</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●●●</span></div>
+        <div class="bubble-row"><span class="bubble-key">empathy</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●</span><span class="bubbles-empty">○○</span></div>
+        <div class="bubble-row"><span class="bubble-key">luck</span><span class="bubble-sep">:</span>&nbsp;<span class="bubbles-fill">●●●</span><span class="bubbles-empty">○○</span></div>
+        <p class="dim mono" style="font-size:0.62rem;margin-top:0.6rem">nyx</p>
+      </div>
+    </div>
+
+    <!-- Personality sliders -->
+    <div class="slider-wrap">
+      <div class="slider-legend">
+        <span><span style="color:var(--link)">●</span> anti</span>
+        <span>personality</span>
+        <span><span style="color:var(--amber)">●</span> nyx</span>
+      </div>
+      <div class="sl-row"><span class="sl-pole">rational</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:12%"></div><div class="sl-dot sl-nyx" style="left:28%"></div></div><span class="sl-pole r">emotional</span></div>
+      <div class="sl-row"><span class="sl-pole">introverted</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:18%"></div><div class="sl-dot sl-nyx" style="left:42%"></div></div><span class="sl-pole r">extroverted</span></div>
+      <div class="sl-row"><span class="sl-pole">cautious</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:8%"></div><div class="sl-dot sl-nyx" style="left:38%"></div></div><span class="sl-pole r">impulsive</span></div>
+      <div class="sl-row"><span class="sl-pole">cold</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:30%"></div><div class="sl-dot sl-nyx" style="left:48%"></div></div><span class="sl-pole r">warm</span></div>
+      <div class="sl-row"><span class="sl-pole">idealist</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:45%"></div><div class="sl-dot sl-nyx" style="left:65%"></div></div><span class="sl-pole r">realist</span></div>
+      <div class="sl-row"><span class="sl-pole">pacifist</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:50%"></div><div class="sl-dot sl-nyx" style="left:62%"></div></div><span class="sl-pole r">violent</span></div>
+      <div class="sl-row"><span class="sl-pole">open</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:22%"></div><div class="sl-dot sl-nyx" style="left:45%"></div></div><span class="sl-pole r">closed off</span></div>
+      <div class="sl-row"><span class="sl-pole">self-destructive</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:35%"></div><div class="sl-dot sl-nyx" style="left:40%"></div></div><span class="sl-pole r">self-preserving</span></div>
+    </div>
+
+    <!-- Relationship -->
+    <div class="rel-wrap">
+      <p class="dim mono" style="font-size:0.68rem;margin-bottom:1rem">anti ↔ nyx</p>
+
+      <div class="sl-row"><span class="sl-pole">dependent</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:40%"></div><div class="sl-dot sl-nyx" style="left:55%"></div></div><span class="sl-pole r">independent</span></div>
+      <div class="sl-row"><span class="sl-pole">leads</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:50%"></div><div class="sl-dot sl-nyx" style="left:50%"></div></div><span class="sl-pole r">follows</span></div>
+      <div class="sl-row"><span class="sl-pole">trusting</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:38%"></div><div class="sl-dot sl-nyx" style="left:42%"></div></div><span class="sl-pole r">suspicious</span></div>
+      <div class="sl-row"><span class="sl-pole">says it aloud</span><div class="sl-track"><div class="sl-dot sl-anti" style="left:15%"></div><div class="sl-dot sl-nyx" style="left:20%"></div></div><span class="sl-pole r">never says it</span></div>
+
+      <p class="dim mono" style="font-size:0.68rem;margin:1.25rem 0 0.75rem">what they think of each other</p>
+      <div class="speech-row">
+        <div class="speech">
+          <span class="speech-from">anti → nyx</span>
+          <div class="speech-text">— fill in —</div>
+        </div>
+        <div class="speech">
+          <span class="speech-from">nyx → anti</span>
+          <div class="speech-text">— fill in —</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-main -->
+
+  <!-- ══════════ SUPPORTING ══════════ -->
+  <div class="tab-panel" id="tab-npc">
+
+    <div class="npc-header-row">
+      <div></div><div>name</div><div>description</div><div>role</div>
+    </div>
+
+    <div id="npcList">
+
+      <div class="npc-row" data-role="neutral" onclick="toggleNpc(this)">
+        <div class="npc-img">img</div>
+        <div><div class="npc-name">Rover</div><div class="npc-sub">18 · M00</div></div>
+        <div class="npc-desc">First real death. No reason for it. That's the point.</div>
+        <span class="npc-tag">neutral</span>
+        <div class="npc-expand">Dies in M00. The first significant death Anti witnesses. No heroics, no meaning — which is exactly what makes it land. Establishes the tone early.</div>
+      </div>
+
+      <div class="npc-row" data-role="ally" onclick="toggleNpc(this)">
+        <div class="npc-img">img</div>
+        <div><div class="npc-name">Katy</div><div class="npc-sub">M00 survivor</div></div>
+        <div class="npc-desc">Enters terrified. Discovers fear is not the same as weakness.</div>
+        <span class="npc-tag">ally</span>
+        <div class="npc-expand">The girl from the engine room in M00. Survives further than expected. One of the significant losses in the later stages. Her arc is about what courage actually looks like in a place that keeps testing it.</div>
+      </div>
+
+      <div class="npc-row" data-role="ally" onclick="toggleNpc(this)">
+        <div class="npc-img">img</div>
+        <div><div class="npc-name">Mary &amp; Nickson</div><div class="npc-sub">married couple</div></div>
+        <div class="npc-desc">Built in normal life. Whether it holds here is the question.</div>
+        <span class="npc-tag">ally</span>
+        <div class="npc-expand">A couple who entered together. Their arc: what the stages do to a relationship that was never designed for this. Whether the foundation was strong enough, or only looked strong because it was never tested.</div>
+      </div>
+
+      <div class="npc-row" data-role="unknown" onclick="toggleNpc(this)">
+        <div class="npc-img">img</div>
+        <div><div class="npc-name">Eurery</div><div class="npc-sub">22 · M00 with Anti</div></div>
+        <div class="npc-desc">Tattooed. Entered same wave as Anti. Role and fate open.</div>
+        <span class="npc-tag">unknown</span>
+        <div class="npc-expand">Male, 22. In the same M00 wave as Anti. Deliberately undefined — fate and role to be determined as the story develops.</div>
+      </div>
+
+      <div class="npc-row" data-role="unknown" onclick="toggleNpc(this)">
+        <div class="npc-img">img</div>
+        <div><div class="npc-name">The Returned</div><div class="npc-sub">age unknown</div></div>
+        <div class="npc-desc">Cleared all 22 stages. Went home. Came back.</div>
+        <span class="npc-tag">unknown</span>
+        <div class="npc-expand">
+          The only person to have finished the game. Not what anyone imagined.<br><br>
+          He went home. Years had passed. Nobody was waiting. He couldn't stay — clearing changed him into something the real world couldn't hold. He came back because everything he had was here.<br><br>
+          His presence is the pivot: the moment Anti and Nyx realise winning doesn't answer the question. It only changes what the question is.
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-npc -->
+
+</div><!-- /wrap -->
+</main>
+
+<div class="vsc-status">
+  <div class="status-left">
+    <span class="status-item mono">⎇ main</span>
+  </div>
+  <div class="status-right">
+    <span class="status-item mono">character ref</span>
+    <span class="status-item mono">© <span id="yr"></span></span>
+  </div>
+</div>
+
+<script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.inner-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('breadLeaf').textContent = name === 'main' ? 'main cast' : 'supporting';
+  }
+
+  function filterNpc(role, btn) {
+    document.querySelectorAll('#npcList .btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.npc-row').forEach(r => {
+      r.style.display = (role === 'all' || r.dataset.role === role) ? '' : 'none';
+    });
+  }
+
+  function toggleNpc(row) {
+    const exp = row.querySelector('.npc-expand');
+    const open = exp.style.display === 'block';
+    document.querySelectorAll('.npc-expand').forEach(e => e.style.display = 'none');
+    if (!open) exp.style.display = 'block';
+  }
+
+  function copyHex(el) {
+    navigator.clipboard.writeText(el.dataset.hex);
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 1500);
+  }
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M00 · The Fool — the fool</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .stage-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    .stage-nav-link {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.12s;
+    }
+
+    .stage-nav-link:hover { color: var(--link); text-decoration: none; }
+    .stage-nav-link.disabled { opacity: 0.3; pointer-events: none; }
+
+    .stage-nav-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      display: block;
+      color: var(--faint);
+      margin-bottom: 0.2rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="vsc-tabs">
+  <a href="index.html"      class="vsc-tab"><span class="tab-icon">◈</span>overview</a>
+  <a href="characters.html" class="vsc-tab"><span class="tab-icon">◈</span>characters</a>
+  <a href="story.html"      class="vsc-tab active"><span class="tab-icon">◈</span>story</a>
+  <a href="gallery.html"    class="vsc-tab"><span class="tab-icon">◈</span>gallery</a>
+  <a href="world.html"      class="vsc-tab"><span class="tab-icon">◈</span>world</a>
+</div>
+
+<div class="vsc-bread">
+  <a href="index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <a href="story.html" class="bread-item">story</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item" id="breadCrumb">M00</span>
+</div>
+
+<main class="page">
+<div class="obs-layout">
+
+  <!-- Chapter sidebar -->
+  <aside class="obs-sidebar">
+    <div class="sidebar-section">
+      <span class="sidebar-label">M00 · The Fool</span>
+      <a href="#ch-1" class="sidebar-link active" data-label="M00 · chapter 1">Chapter 1</a>
+      <a href="#ch-2" class="sidebar-link"        data-label="M00 · chapter 2">Chapter 2</a>
+      <!-- add more chapter links as you write them -->
+    </div>
+
+    <div class="sidebar-section" style="border-top:1px solid var(--border);padding-top:0.75rem;margin-top:0.5rem">
+      <span class="sidebar-label">stages</span>
+      <a href="story.html"    class="sidebar-link">← all stages</a>
+      <a href="story-m00.html" class="sidebar-link active" style="color:var(--link)">M00 · The Fool</a>
+      <a href="story-m01.html" class="sidebar-link dim">M01 · The Magician</a>
+      <a href="story-m02.html" class="sidebar-link dim">M02 · The High Priestess</a>
+    </div>
+  </aside>
+
+  <!-- Reading area -->
+  <div class="obs-content obs-content-narrow">
+
+    <!-- Stage header -->
+    <div style="margin-bottom:2.5rem">
+      <span class="chapter-meta">Stage M00</span>
+      <h1>The Fool</h1>
+      <p class="dim" style="font-size:0.82rem;margin:0.5rem 0 0">entry · disorientation</p>
+    </div>
+
+    <!-- ── CHAPTER 1 ── -->
+    <section class="chapter-section" id="ch-1">
+      <span class="chapter-meta">Chapter 1</span>
+      <h2 style="border:none;margin-top:0">Chapter Title</h2>
+
+      <blockquote>
+        "An epigraph or opening quote, if you have one."
+        <cite>— source</cite>
+      </blockquote>
+
+      <div class="chapter-art">
+        <!-- <img src="art/m00-ch1.jpg" alt=""> -->
+        chapter art
+      </div>
+
+      <p>Your writing goes here. Each paragraph in a <code style="color:var(--link);font-size:0.85em">&lt;p&gt;</code> tag is spaced automatically.</p>
+
+      <p>Use <em>italics for internal thought</em> and <strong>bold</strong> for stronger moments.</p>
+
+      <div class="scene-break">· · ·</div>
+
+      <p>Continue after the scene break.</p>
+    </section>
+
+    <!-- ── CHAPTER 2 ── -->
+    <section class="chapter-section" id="ch-2">
+      <span class="chapter-meta">Chapter 2</span>
+      <h2 style="border:none;margin-top:0">Chapter Title</h2>
+      <p>Second chapter text.</p>
+    </section>
+
+    <!-- ── To add more chapters: copy a section block above ── -->
+
+    <!-- Prev / Next stage navigation -->
+    <div class="stage-nav">
+      <span class="stage-nav-link disabled">
+        <span>←</span>
+        <span>
+          <span class="stage-nav-label">previous stage</span>
+          —
+        </span>
+      </span>
+      <a href="story-m01.html" class="stage-nav-link">
+        <span>
+          <span class="stage-nav-label">next stage</span>
+          M01 · The Magician
+        </span>
+        <span>→</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+</main>
+
+<div class="vsc-status">
+  <div class="status-left">
+    <span class="status-item mono">⎇ main</span>
+  </div>
+  <div class="status-right">
+    <span class="status-item mono">M00 · The Fool</span>
+    <span class="status-item mono">© <span id="yr"></span></span>
+  </div>
+</div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  const sections = document.querySelectorAll('.chapter-section');
+  const links    = document.querySelectorAll('.obs-sidebar .sidebar-link[data-label]');
+  const crumb    = document.getElementById('breadCrumb');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(l => {
+          const active = l.getAttribute('href') === '#' + id;
+          l.classList.toggle('active', active);
+          if (active && l.dataset.label) crumb.textContent = l.dataset.label;
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

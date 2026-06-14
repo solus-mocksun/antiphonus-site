@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>the fool</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .home-wrap {
+      max-width: 680px;
+      padding: 3.5rem 3rem 6rem;
+      margin: 0 auto;
+    }
+
+    .home-title-row { margin-bottom: 1.25rem; }
+
+    .home-tagline {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      font-family: var(--mono);
+    }
+
+    .home-nav {
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .home-nav-item {
+      display: block;
+      background: var(--bg-2);
+      padding: 1.1rem 1.25rem;
+      text-decoration: none;
+      transition: background 0.12s;
+      border-left: 2px solid transparent;
+    }
+
+    .home-nav-item:hover {
+      background: var(--bg-hover);
+      border-left-color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-label {
+      font-size: 0.6rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-family: var(--mono);
+      margin-bottom: 0.3rem;
+    }
+
+    .nav-title {
+      font-size: 0.9rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .nav-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .home-meta {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="vsc-tabs">
+  <a href="index.html"      class="vsc-tab active"><span class="tab-icon">◈</span>overview</a>
+  <a href="characters.html" class="vsc-tab"><span class="tab-icon">◈</span>characters</a>
+  <a href="story.html"      class="vsc-tab"><span class="tab-icon">◈</span>story</a>
+  <a href="gallery.html"    class="vsc-tab"><span class="tab-icon">◈</span>gallery</a>
+  <a href="world.html"      class="vsc-tab"><span class="tab-icon">◈</span>world</a>
+</div>
+
+<div class="vsc-bread">
+  <a href="index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item">overview</span>
+</div>
+
+<main class="page">
+<div class="home-wrap">
+
+  <div class="home-title-row">
+    <span class="site-title">The Fool</span><span class="cursor"></span>
+  </div>
+
+  <p class="home-tagline">// The first thing they take from you is your death.<br>// The second is your time.</p>
+
+  <p>Beyond death waits a world of unfinished people.</p>
+
+  <blockquote>
+    "If this is hell, why does it let us leave?"
+  </blockquote>
+
+  <nav class="home-nav">
+    <a href="characters.html" class="home-nav-item">
+      <div class="nav-label">characters</div>
+      <div class="nav-title">Anti &amp; Nyx</div>
+      <div class="nav-sub">reference sheets, stats, dynamics</div>
+    </a>
+    <a href="story.html" class="home-nav-item">
+      <div class="nav-label">story</div>
+      <div class="nav-title">The Chapters</div>
+      <div class="nav-sub">the actual writing, as it exists</div>
+    </a>
+    <a href="gallery.html" class="home-nav-item">
+      <div class="nav-label">gallery</div>
+      <div class="nav-title">Concept Art</div>
+      <div class="nav-sub">illustrations &amp; visual reference</div>
+    </a>
+    <a href="world.html" class="home-nav-item">
+      <div class="nav-label">world</div>
+      <div class="nav-title">The Game</div>
+      <div class="nav-sub">rules, stages, cities, lore</div>
+    </a>
+  </nav>
+
+  <div class="home-meta">
+    <div class="wip-badge">
+      <div class="wip-glow"></div>
+      work in progress
+    </div>
+    <span class="dim mono" style="font-size:0.72rem">last updated <span id="lastmod"></span></span>
+  </div>
+
+</div>
+</main>
+
+<div class="vsc-status">
+  <div class="status-left">
+    <span class="status-item mono">⎇ main</span>
+  </div>
+  <div class="status-right">
+    <span class="status-item mono">novel · death game</span>
+    <span class="status-item mono">© <span id="yr"></span></span>
+  </div>
+</div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  const d = new Date(document.lastModified);
+  const pad = n => String(n).padStart(2, '0');
+  document.getElementById('lastmod').textContent =
+    d.getFullYear() + ' · ' +
+    d.toLocaleString('en', { month: 'short' }).toLowerCase() + ' · ' +
+    pad(d.getDate()) + ' · ' +
+    pad(d.getHours()) + ':' + pad(d.getMinutes());
+</script>
+</body>
+</html>
