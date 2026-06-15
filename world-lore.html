@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lore — the fool</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .world-content { max-width: 720px; padding: 2.5rem 2.5rem 6rem; }
+    .world-nav { display:flex; justify-content:space-between; align-items:center; padding-top:3rem; border-top:1px solid var(--border); margin-top:3rem; }
+    .world-nav-link { font-size:0.78rem; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:0.5rem; padding:0.6rem 1rem; border:1px solid var(--border); background:var(--bg-2); transition:color 0.12s,border-color 0.12s; }
+    .world-nav-link:hover { color:var(--accent-2); border-color:var(--accent); text-decoration:none; }
+    .world-nav-link.disabled { opacity:0.25; pointer-events:none; }
+    .world-nav-label { font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; font-family:var(--mono); display:block; color:var(--muted); margin-bottom:0.2rem; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="header-logo">After all, tomorrow is another day</span>
+  <nav><ul class="header-nav">
+    <li><a href="index.html">overview</a></li>
+    <li><a href="characters.html">characters</a></li>
+    <li><a href="story.html">story</a></li>
+    <li><a href="gallery.html">gallery</a></li>
+    <li><a href="world.html" class="active">world</a></li>
+  </ul></nav>
+</header>
+<div class="vsc-bread" style="top:56px;">
+  <a href="index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <a href="world.html" class="bread-item">world</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item">lore</span>
+</div>
+
+<main class="page" style="padding-top:calc(56px + 28px);">
+<div class="world-content">
+
+  <span style="font-size:0.65rem;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;font-family:var(--mono)"><a href="world.html" style="color:var(--muted);text-decoration:none">world</a> · lore</span>
+  <h1 style="margin-top:0.4rem;margin-bottom:2rem">Lore</h1>
+
+  <div class="block">
+    <div class="block-title">the returned</div>
+    <p>One person has cleared all 22 stages. He went home. Years had passed. Nobody was waiting. Everything was different. He came back — not out of defeat, but because everything he had was here: reputation, resources, the only people who knew who he was.</p>
+    <p>His presence in the story is the pivot — the moment Anti and Nyx realize that winning does not answer the question. It only changes what the question is.</p>
+  </div>
+  <div class="block">
+    <div class="block-title">who built it</div>
+    <p>Unknown. The world is too deliberate to be random. The 22-stage structure, the tarot naming, the currency system — these are designed. The question of who built this world, and why, is not answered directly. It may never be.</p>
+  </div>
+  <div class="block">
+    <div class="block-title">the leaderboard</div>
+    <p>A public ranking exists across all four cities showing how many stages each known player has cleared. It creates its own culture — respect, rivalry, myth. Nyx is ranked in the top five. Most people on the board have been there for years and have stopped trying to move.</p>
+  </div>
+
+  <div class="world-nav">
+    <a href="world-economy.html" class="world-nav-link"><span>←</span><span><span class="world-nav-label">previous</span>Time & Currency</span></a>
+    <span class="world-nav-link disabled"><span><span class="world-nav-label">next</span>—</span><span>→</span></span>
+  </div>
+
+</div>
+</main>
+
+</body>
+</html>

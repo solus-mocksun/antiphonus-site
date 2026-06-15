@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Game — the fool</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .world-content { max-width: 720px; padding: 2.5rem 2.5rem 6rem; }
+    .world-nav { display:flex; justify-content:space-between; align-items:center; padding-top:3rem; border-top:1px solid var(--border); margin-top:3rem; }
+    .world-nav-link { font-size:0.78rem; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:0.5rem; padding:0.6rem 1rem; border:1px solid var(--border); background:var(--bg-2); transition:color 0.12s,border-color 0.12s; }
+    .world-nav-link:hover { color:var(--accent-2); border-color:var(--accent); text-decoration:none; }
+    .world-nav-link.disabled { opacity:0.25; pointer-events:none; }
+    .world-nav-label { font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; font-family:var(--mono); display:block; color:var(--muted); margin-bottom:0.2rem; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="header-logo">After all, tomorrow is another day</span>
+  <nav><ul class="header-nav">
+    <li><a href="index.html">overview</a></li>
+    <li><a href="characters.html">characters</a></li>
+    <li><a href="story.html">story</a></li>
+    <li><a href="gallery.html">gallery</a></li>
+    <li><a href="world.html" class="active">world</a></li>
+  </ul></nav>
+</header>
+<div class="vsc-bread" style="top:56px;">
+  <a href="index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <a href="world.html" class="bread-item">world</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item">overview</span>
+</div>
+
+<main class="page" style="padding-top:calc(56px + 28px);">
+<div class="world-content">
+
+  <span style="font-size:0.65rem;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;font-family:var(--mono)"><a href="world.html" style="color:var(--muted);text-decoration:none">world</a> · overview</span>
+  <h1 style="margin-top:0.4rem;margin-bottom:2rem">The Game</h1>
+
+  <div class="block">
+    <div class="block-title">what it is</div>
+    <p>If you die with an extremely strong will to live, you do not simply end. You get pulled into a constructed world built around a 22-stage game. No one fully understands who made it or why. Everyone who arrives was mid-stride when their life cut short.</p>
+    <p>Survive all 22 stages and you go home. That is the rule. What nobody says out loud is what you come back as.</p>
+  </div>
+  <div class="block">
+    <div class="block-title">entry</div>
+    <p>Entry is not chosen. Players arrive in M00 — the starting stage — without explanation. The world does not introduce itself.</p>
+  </div>
+  <div class="block">
+    <div class="block-title">death inside the game</div>
+    <p>Death inside the game is permanent. There is no respawn. The stages are designed — by luck, by violence, or by the choices you make under pressure — to remove people.</p>
+  </div>
+  <div class="block">
+    <div class="block-title">between stages</div>
+    <p>After clearing a stage, players enter the cities — rest zones where the game pauses. Time there is real time. Some people stay for years, taking escort work, protection jobs, the kind of labor that does not get named.</p>
+  </div>
+
+  <div class="world-nav">
+    <span class="world-nav-link disabled"><span>←</span><span><span class="world-nav-label">previous</span>—</span></span>
+    <a href="world-stages.html" class="world-nav-link"><span><span class="world-nav-label">next</span>The 22 Stages</span><span>→</span></a>
+  </div>
+
+</div>
+</main>
+
+</body>
+</html>
