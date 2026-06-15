@@ -1,83 +1,288 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-size="md">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>M00 · The Fool — the fool</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    /* ── READING THEMES ── */
+    [data-theme="dark"]  { --read-bg:#1a1a1a; --read-text:#dcddde; --read-muted:#888; --read-border:#3d3d3d; --read-block:#242424; }
+    [data-theme="light"] { --read-bg:#f9f9f9; --read-text:#1a1a1a; --read-muted:#666; --read-border:#ddd; --read-block:#f0f0f0; --accent:#555; --accent-2:#777; --link:#444; --faint:#bbb; --accent-dim:rgba(85,85,85,0.1); }
+    [data-theme="sepia"] { --read-bg:#f4ead8; --read-text:#3b2f1e; --read-muted:#8a7560; --read-border:#d4c4a8; --read-block:#ede3ce; --accent:#7c4a1e; --accent-2:#9a5c28; --link:#7c4a1e; --faint:#c4ae8a; --accent-dim:rgba(124,74,30,0.1); }
+
+    body {
+      background: var(--read-bg);
+      color: var(--read-text);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* ── LAYOUT — flex so content expands when sidebar closes ── */
+    .obs-layout {
+      display: flex;
+      min-height: calc(100vh - var(--top-offset) - var(--status-h));
+    }
+
+    /* Sidebar */
+    .obs-sidebar {
+      width: 220px;
+      min-width: 220px;
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: width 0.25s ease, min-width 0.25s ease, opacity 0.2s ease, padding 0.25s ease, border 0.25s ease;
+    }
+
+    .obs-layout.sidebar-closed .obs-sidebar {
+      width: 0;
+      min-width: 0;
+      opacity: 0;
+      padding: 0;
+      border: none;
+    }
+
+    /* Content: flex:1 so it fills all remaining space, content centered inside */
+    .obs-content {
+      flex: 1;
+      min-width: 0;
+      padding: 2.5rem 2rem 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: padding 0.25s ease;
+    }
+
+    /* The actual reading column — max-width + centered */
+    .reading-inner {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* ── TEXT SIZE ── */
+    [data-size="sm"] .reading-inner p { font-size: 0.82rem; }
+    [data-size="md"] .reading-inner p { font-size: 0.93rem; }
+    [data-size="lg"] .reading-inner p { font-size: 1.05rem; line-height: 2; }
+    [data-size="xl"] .reading-inner p { font-size: 1.18rem; line-height: 2.1; }
+
+    /* ── READER TOOLBAR ── */
+    .reader-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--read-border);
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .reader-bar-label {
+      font-size: 0.6rem;
+      color: var(--read-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-family: var(--mono);
+    }
+
+    .reader-btn {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.25rem 0.65rem;
+      border: 1px solid var(--read-border);
+      background: transparent;
+      color: var(--read-muted);
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.12s;
+    }
+
+    .reader-btn:hover  { color: var(--read-text); border-color: var(--accent); }
+    .reader-btn.active { color: var(--accent-2); border-color: var(--accent); background: var(--accent-dim); }
+
+    .reader-divider {
+      width: 1px; height: 16px;
+      background: var(--read-border);
+      margin: 0 0.15rem;
+    }
+
+    /* ── SIDEBAR TOGGLE ── */
+    .sidebar-toggle {
+      width: 26px; height: 26px;
+      background: transparent;
+      border: 1px solid var(--read-border);
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--read-muted);
+      transition: color 0.12s, border-color 0.12s;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .sidebar-toggle:hover { color: var(--read-text); border-color: var(--accent); }
+    .sidebar-toggle svg { width: 14px; height: 14px; }
+
+    /* ── STAGE NAV ── */
     .stage-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-top: 3rem;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--read-border);
       margin-top: 3rem;
+      width: 100%;
     }
 
     .stage-nav-link {
       font-size: 0.78rem;
-      color: var(--muted);
+      color: var(--read-muted);
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: color 0.12s;
+      padding: 0.6rem 1rem;
+      border: 1px solid var(--read-border);
+      background: var(--read-block);
+      transition: color 0.12s, border-color 0.12s;
     }
 
-    .stage-nav-link:hover { color: var(--link); text-decoration: none; }
-    .stage-nav-link.disabled { opacity: 0.3; pointer-events: none; }
+    .stage-nav-link:hover { color: var(--accent-2); border-color: var(--accent); text-decoration: none; }
+    .stage-nav-link.disabled { opacity: 0.25; pointer-events: none; }
 
     .stage-nav-label {
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-family: var(--mono);
       display: block;
-      color: var(--faint);
+      color: var(--read-muted);
       margin-bottom: 0.2rem;
+    }
+
+    /* theme colors for content */
+    .reading-inner h1,
+    .reading-inner h2  { color: var(--read-text); }
+    .reading-inner p   { color: var(--read-text); }
+    .reading-inner blockquote { border-color: var(--accent); color: var(--read-muted); }
+    .chapter-section   { color: var(--read-text); }
+
+    /* ── MOBILE: sidebar as overlay drawer ── */
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 89;
+      cursor: pointer;
+    }
+
+    @media (max-width: 720px) {
+      /* Override global display:none — drawer handles visibility */
+      .obs-layout .obs-sidebar {
+        display: block !important;
+        position: fixed !important;
+        top: var(--top-offset);
+        left: 0;
+        bottom: var(--status-h);
+        width: 260px !important;
+        min-width: 260px !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        z-index: 90;
+        opacity: 1 !important;
+        padding: 1rem 0 !important;
+        border-right: 1px solid var(--border) !important;
+        /* Use transform instead of width for slide animation */
+        transform: translateX(0) !important;
+        transition: transform 0.25s ease !important;
+      }
+
+      /* Closed: slide off to the left */
+      .obs-layout.sidebar-closed .obs-sidebar {
+        transform: translateX(-100%) !important;
+      }
+
+      /* Backdrop shows when sidebar is open */
+      .obs-layout:not(.sidebar-closed) .sidebar-backdrop {
+        display: block;
+      }
+
+      /* Content always full-width on mobile */
+      .obs-content {
+        padding: 2rem 1.25rem 5rem;
+      }
     }
   </style>
 </head>
 <body>
 
-<div class="vsc-tabs">
-  <a href="index.html"      class="vsc-tab"><span class="tab-icon">◈</span>overview</a>
-  <a href="characters.html" class="vsc-tab"><span class="tab-icon">◈</span>characters</a>
-  <a href="story.html"      class="vsc-tab active"><span class="tab-icon">◈</span>story</a>
-  <a href="gallery.html"    class="vsc-tab"><span class="tab-icon">◈</span>gallery</a>
-  <a href="world.html"      class="vsc-tab"><span class="tab-icon">◈</span>world</a>
-</div>
+<header class="site-header">
+  <span class="header-logo">After all, tomorrow is another day</span>
+  <nav>
+    <ul class="header-nav">
+      <li><a href="index.html">overview</a></li>
+      <li><a href="characters.html">characters</a></li>
+      <li><a href="story.html" class="active">story</a></li>
+      <li><a href="gallery.html">gallery</a></li>
+      <li><a href="world.html">world</a></li>
+    </ul>
+  </nav>
+</header>
 
-<div class="vsc-bread">
+<div class="vsc-bread" style="top:56px;">
   <a href="index.html" class="bread-item">the fool</a>
   <span class="bread-sep">›</span>
   <a href="story.html" class="bread-item">story</a>
   <span class="bread-sep">›</span>
-  <span class="bread-item" id="breadCrumb">M00</span>
+  <span class="bread-item">M00 · The Fool</span>
 </div>
 
-<main class="page">
-<div class="obs-layout">
+<main class="page" style="padding-top:calc(56px + 28px);">
+<div class="obs-layout" id="layout">
 
-  <!-- Chapter sidebar -->
+  <!-- Mobile backdrop — closes sidebar when tapped -->
+  <div class="sidebar-backdrop" id="sbBackdrop" onclick="toggleSidebar()"></div>
+
+  <!-- Sidebar -->
   <aside class="obs-sidebar">
     <div class="sidebar-section">
       <span class="sidebar-label">M00 · The Fool</span>
       <a href="#ch-1" class="sidebar-link active" data-label="M00 · chapter 1">Chapter 1</a>
       <a href="#ch-2" class="sidebar-link"        data-label="M00 · chapter 2">Chapter 2</a>
-      <!-- add more chapter links as you write them -->
     </div>
-
     <div class="sidebar-section" style="border-top:1px solid var(--border);padding-top:0.75rem;margin-top:0.5rem">
       <span class="sidebar-label">stages</span>
-      <a href="story.html"    class="sidebar-link">← all stages</a>
+      <a href="story.html"     class="sidebar-link">← all stages</a>
       <a href="story-m00.html" class="sidebar-link active" style="color:var(--link)">M00 · The Fool</a>
+      <a href="story-m01.html" class="sidebar-link dim">M01 · The Magician</a>
     </div>
   </aside>
 
-  <!-- Reading area -->
-  <div class="obs-content obs-content-narrow">
+  <!-- Content — fills all space, reading-inner is centered inside -->
+  <div class="obs-content">
+  <div class="reading-inner">
+
+    <!-- Reader toolbar -->
+    <div class="reader-bar">
+      <button class="sidebar-toggle" onclick="toggleSidebar()" title="toggle sidebar">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="5.5" y1="1.5" x2="5.5" y2="14.5" stroke="currentColor" stroke-width="1.2"/>
+          <rect x="2" y="2" width="3" height="12" rx="1.5" fill="currentColor" opacity="0.35"/>
+        </svg>
+      </button>
+      <div class="reader-divider"></div>
+      <span class="reader-bar-label">theme</span>
+      <button class="reader-btn active" onclick="setTheme('dark',this)">dark</button>
+      <button class="reader-btn"        onclick="setTheme('light',this)">light</button>
+      <button class="reader-btn"        onclick="setTheme('sepia',this)">sepia</button>
+      <div class="reader-divider"></div>
+      <span class="reader-bar-label">size</span>
+      <button class="reader-btn"        onclick="setSize('sm',this)">S</button>
+      <button class="reader-btn active" onclick="setSize('md',this)">M</button>
+      <button class="reader-btn"        onclick="setSize('lg',this)">L</button>
+      <button class="reader-btn"        onclick="setSize('xl',this)">XL</button>
+    </div>
 
     <!-- Stage header -->
     <div style="margin-bottom:2.5rem">
@@ -117,34 +322,29 @@
       <p>Second chapter text.</p>
     </section>
 
-    <!-- ── To add more chapters: copy a section block above ── -->
-
-    <!-- Prev / Next stage navigation -->
+    <!-- Prev / Next -->
     <div class="stage-nav">
       <span class="stage-nav-link disabled">
         <span>←</span>
         <span>
           <span class="stage-nav-label">previous stage</span>
-          —
+          none
         </span>
       </span>
-      <span class="stage-nav-link disabled">
+      <a href="story-m01.html" class="stage-nav-link">
         <span>
           <span class="stage-nav-label">next stage</span>
-          —
+          M01 · The Magician
         </span>
         <span>→</span>
-      </span>
+      </a>
     </div>
 
-  </div>
-</div>
+  </div><!-- /reading-inner -->
+  </div><!-- /obs-content -->
+</div><!-- /obs-layout -->
 </main>
 
-<div class="vsc-status">
-  <div class="status-left">
-    <span class="status-item mono">⎇ main</span>
-  </div>
   <div class="status-right">
     <span class="status-item mono">M00 · The Fool</span>
     <span class="status-item mono">© <span id="yr"></span></span>
@@ -154,6 +354,59 @@
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
 
+  // ── Sidebar ──
+  function toggleSidebar() {
+    const closed = document.getElementById('layout').classList.toggle('sidebar-closed');
+    localStorage.setItem('sidebar', closed ? 'closed' : 'open');
+  }
+
+  // Default: closed on mobile, open on desktop (unless localStorage overrides)
+  const savedSidebar = localStorage.getItem('sidebar');
+  if (savedSidebar === 'closed' || (!savedSidebar && window.innerWidth <= 720))
+    document.getElementById('layout').classList.add('sidebar-closed');
+
+  // ── Theme ──
+  function setTheme(name, btn) {
+    document.documentElement.setAttribute('data-theme', name);
+    document.querySelectorAll('.reader-btn').forEach(b => {
+      if (['dark','light','sepia'].includes(b.textContent.trim())) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    localStorage.setItem('readTheme', name);
+  }
+
+  // ── Size ──
+  function setSize(name, btn) {
+    document.documentElement.setAttribute('data-size', name);
+    document.querySelectorAll('.reader-btn').forEach(b => {
+      if (['S','M','L','XL'].includes(b.textContent.trim())) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    localStorage.setItem('readSize', name);
+  }
+
+  // ── Restore prefs ──
+  const savedTheme = localStorage.getItem('readTheme');
+  const savedSize  = localStorage.getItem('readSize');
+
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.querySelectorAll('.reader-btn').forEach(b => {
+      if (['dark','light','sepia'].includes(b.textContent.trim()))
+        b.classList.toggle('active', b.textContent.trim() === savedTheme);
+    });
+  }
+
+  if (savedSize) {
+    document.documentElement.setAttribute('data-size', savedSize);
+    const map = { sm:'S', md:'M', lg:'L', xl:'XL' };
+    document.querySelectorAll('.reader-btn').forEach(b => {
+      if (['S','M','L','XL'].includes(b.textContent.trim()))
+        b.classList.toggle('active', b.textContent.trim() === map[savedSize]);
+    });
+  }
+
+  // ── Scroll spy ──
   const sections = document.querySelectorAll('.chapter-section');
   const links    = document.querySelectorAll('.obs-sidebar .sidebar-link[data-label]');
   const crumb    = document.getElementById('breadCrumb');

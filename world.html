@@ -5,230 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>world — the fool</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .world-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:2rem; }
+    .world-card { display:block; background:var(--bg-2); padding:1.25rem 1.4rem; text-decoration:none; transition:background 0.12s; border-left:2px solid transparent; position:relative; }
+    .world-card:hover { background:var(--bg-hover); border-left-color:var(--accent); text-decoration:none; }
+    .world-card.wip { opacity:0.45; pointer-events:none; }
+    .world-card-label { font-size:0.6rem; color:var(--muted); letter-spacing:0.14em; text-transform:uppercase; font-family:var(--mono); margin-bottom:0.35rem; }
+    .world-card-title { font-size:0.95rem; color:var(--white); font-weight:500; margin-bottom:0.2rem; }
+    .world-card-sub { font-size:0.75rem; color:var(--muted); line-height:1.5; }
+    .world-card-status { position:absolute; top:0.75rem; right:0.9rem; font-size:0.58rem; color:var(--accent-2); font-family:var(--mono); letter-spacing:0.06em; }
+    .world-card.wip .world-card-status { color:var(--faint); }
+  </style>
 </head>
 <body>
 
-<div class="vsc-tabs">
-  <a href="index.html"      class="vsc-tab"><span class="tab-icon">◈</span>overview</a>
-  <a href="characters.html" class="vsc-tab"><span class="tab-icon">◈</span>characters</a>
-  <a href="story.html"      class="vsc-tab"><span class="tab-icon">◈</span>story</a>
-  <a href="gallery.html"    class="vsc-tab"><span class="tab-icon">◈</span>gallery</a>
-  <a href="world.html"      class="vsc-tab active"><span class="tab-icon">◈</span>world</a>
-</div>
+<header class="site-header">
+  <span class="header-logo">After all, tomorrow is another day</span>
+  <nav><ul class="header-nav">
+    <li><a href="index.html">overview</a></li>
+    <li><a href="characters.html">characters</a></li>
+    <li><a href="story.html">story</a></li>
+    <li><a href="gallery.html">gallery</a></li>
+    <li><a href="world.html" class="active">world</a></li>
+  </ul></nav>
+</header>
 
-<div class="vsc-bread">
+<div class="vsc-bread" style="top:56px;">
   <a href="index.html" class="bread-item">the fool</a>
   <span class="bread-sep">›</span>
-  <a href="world.html" class="bread-item">world</a>
-  <span class="bread-sep">›</span>
-  <span class="bread-item" id="breadCrumb">overview</span>
+  <span class="bread-item">world</span>
 </div>
 
-<main class="page">
-<div class="obs-layout">
-
-  <aside class="obs-sidebar">
-    <div class="sidebar-section">
-      <span class="sidebar-label">sections</span>
-      <a href="#overview" class="sidebar-link active" data-label="overview"><span class="sidebar-icon">◦</span> Overview</a>
-      <a href="#rules"    class="sidebar-link"        data-label="rules"   ><span class="sidebar-icon">◦</span> Rules</a>
-      <a href="#stages"   class="sidebar-link"        data-label="stages"  ><span class="sidebar-icon">◦</span> Stages</a>
-      <a href="#cities"   class="sidebar-link"        data-label="cities"  ><span class="sidebar-icon">◦</span> Cities</a>
-      <a href="#currency" class="sidebar-link"        data-label="currency"><span class="sidebar-icon">◦</span> Currency</a>
-      <a href="#lore"     class="sidebar-link"        data-label="lore"    ><span class="sidebar-icon">◦</span> Lore</a>
-    </div>
-  </aside>
-
-  <div class="obs-content" style="max-width:780px">
-
-    <!-- ── OVERVIEW ── -->
-    <section id="overview" style="margin-bottom:3.5rem">
-      <h1 style="margin-bottom:0.4rem">The Game</h1>
-      <p class="dim mono" style="font-size:0.75rem;margin-bottom:1.75rem">the world / the stages / the question</p>
-
-      <div class="info-grid">
-        <div class="info-cell">
-          <div class="info-key">stages</div>
-          <div class="info-val">22</div>
-        </div>
-        <div class="info-cell">
-          <div class="info-key">cities</div>
-          <div class="info-val">4</div>
-        </div>
-        <div class="info-cell">
-          <div class="info-key">currency</div>
-          <div class="info-val">time</div>
-        </div>
-        <div class="info-cell">
-          <div class="info-key">entry condition</div>
-          <div class="info-val">strong will to live at death</div>
-        </div>
-        <div class="info-cell">
-          <div class="info-key">origin</div>
-          <div class="info-val">someone built this</div>
-        </div>
-        <div class="info-cell">
-          <div class="info-key">victory condition</div>
-          <div class="info-val">survive all 22 stages</div>
-        </div>
-      </div>
-
-      <div class="block" style="margin-top:0.75rem">
-        <div class="block-title">what it is</div>
-        <p>If you die with an extremely strong will to live, you don't simply end. You get pulled into a constructed world built around a 22-stage game. No one fully understands who made it or why. Everyone who arrives was mid-stride when their life cut short.</p>
-        <p>Survive all 22 stages and you go home. That's the rule. What nobody says out loud is what you come back as.</p>
-      </div>
-    </section>
-
-    <hr>
-
-    <!-- ── RULES ── -->
-    <section id="rules" style="margin-bottom:3.5rem">
-      <h2>Rules</h2>
-
-      <div class="block">
-        <div class="block-title">entry</div>
-        <p>Entry is not chosen. Players arrive in M00 — the starting stage — without explanation. The world does not introduce itself.</p>
-      </div>
-
-      <div class="block">
-        <div class="block-title">between stages</div>
-        <p>After clearing a stage, players enter the cities — rest zones where the game pauses. Time there is real time. Some people stay for years, taking escort work, protection jobs, the kind of labor that doesn't get named.</p>
-      </div>
-
-      <div class="block">
-        <div class="block-title">death</div>
-        <p>Death inside the game is permanent. There is no respawn. The stages are designed — by luck, by violence, or by the choices you make under pressure — to remove people.</p>
-      </div>
-    </section>
-
-    <hr>
-
-    <!-- ── STAGES ── -->
-    <section id="stages" style="margin-bottom:3.5rem">
-      <h2>The 22 Stages</h2>
-
-      <p>Stages are named after the Major Arcana of the tarot, M00 through M21. The naming is thematic, not literal — each stage has its own rules and conditions for passing.</p>
-
-      <div class="callout">
-        <div class="callout-title">note</div>
-        <p>Stage details are added as the story reaches them. Most of the 22 are still undocumented.</p>
-      </div>
-
-      <div class="item-grid">
-        <div class="item-cell">
-          <div class="item-label">M00</div>
-          <div class="item-name">The Fool</div>
-          <div class="item-sub">entry / disorientation</div>
-        </div>
-        <div class="item-cell">
-          <div class="item-label">M01</div>
-          <div class="item-name">The Magician</div>
-          <div class="item-sub">—</div>
-        </div>
-        <div class="item-cell">
-          <div class="item-label">M02</div>
-          <div class="item-name">The High Priestess</div>
-          <div class="item-sub">where Anti &amp; Nyx meet</div>
-        </div>
-        <div class="item-cell">
-          <div class="item-label">M03</div>
-          <div class="item-name">The Empress</div>
-          <div class="item-sub">—</div>
-        </div>
-        <div class="item-cell">
-          <div class="item-label">M04 – M20</div>
-          <div class="item-name">—</div>
-          <div class="item-sub">to be detailed</div>
-        </div>
-        <div class="item-cell">
-          <div class="item-label">M21</div>
-          <div class="item-name">The World</div>
-          <div class="item-sub">final stage</div>
-        </div>
-      </div>
-    </section>
-
-    <hr>
-
-    <!-- ── CITIES ── -->
-    <section id="cities" style="margin-bottom:3.5rem">
-      <h2>The Four Cities</h2>
-
-      <p>Four cities sit between the stages. They function as real places — economies, factions, hierarchies. A leaderboard tracks cleared stages across all four. Nyx sits in the top 5 when the story begins, five years of work behind him.</p>
-
-      <div class="block">
-        <div class="block-title">life in the cities</div>
-        <p>People who've cleared stages but haven't entered the next one can stay indefinitely. Some make careers of it: escort work, protection contracts, information brokering. It is not safe, but it is stable in a way the stages never are.</p>
-        <p>This is where most of the support cast operates. The Moretti faction collapse — the event that destroyed Nyx's org — happened here.</p>
-      </div>
-    </section>
-
-    <hr>
-
-    <!-- ── CURRENCY ── -->
-    <section id="currency" style="margin-bottom:3.5rem">
-      <h2>Currency</h2>
-
-      <div class="block">
-        <div class="block-title">time</div>
-        <p>The currency of Antiphonus is time — literally. Time remaining, time borrowed, time owed. The exact mechanics are deliberately opaque in the early stages. Anti works it out faster than most.</p>
-      </div>
-    </section>
-
-    <hr>
-
-    <!-- ── LORE ── -->
-    <section id="lore" style="margin-bottom:3.5rem">
-      <h2>Lore</h2>
-
-      <div class="block">
-        <div class="block-title">the returned</div>
-        <p>One person has cleared all 22 stages. He went home. Years had passed. Nobody was waiting. Everything was different. He came back — not out of defeat, but because everything he had was here: reputation, resources, the only people who knew who he was.</p>
-        <p>His presence in the story is the pivot — the moment Anti and Nyx realize that winning doesn't answer the question. It only changes what the question is.</p>
-      </div>
-
-      <div class="block">
-        <div class="block-title">who built it</div>
-        <p>Unknown. The world is too deliberate to be random. The 22-stage structure, the tarot naming, the currency system — these are designed. The question of who built Antiphonus, and why, is not answered directly. It may never be.</p>
-      </div>
-    </section>
-
+<main class="page" style="padding-top:calc(56px + 28px);">
+<div class="obs-content" style="max-width:900px">
+  <h1 style="margin-bottom:0.3rem">World</h1>
+  <p class="dim mono" style="font-size:0.75rem;margin-bottom:0.5rem">the database — select a section to explore</p>
+  <div class="wip-badge" style="display:inline-flex;margin-bottom:0">
+    <div class="wip-glow"></div>
+    work in progress
+  </div>
+  <div class="world-grid">
+    <a href="world-overview.html" class="world-card">
+      <div class="world-card-label">world · overview</div>
+      <div class="world-card-title">The Game</div>
+      <div class="world-card-sub">What this world is, how it works, and why it exists</div>
+      <span class="world-card-status">available</span>
+    </a>
+    <a href="world-stages.html" class="world-card">
+      <div class="world-card-label">world · stages</div>
+      <div class="world-card-title">The 22 Stages</div>
+      <div class="world-card-sub">Each stage named for a Major Arcana — M00 through M21</div>
+      <span class="world-card-status">available</span>
+    </a>
+    <a href="world-history.html" class="world-card wip">
+      <div class="world-card-label">world · history</div>
+      <div class="world-card-title">History</div>
+      <div class="world-card-sub">Origins, timeline, and what came before</div>
+      <span class="world-card-status">not yet written</span>
+    </a>
+    <a href="world-politics.html" class="world-card wip">
+      <div class="world-card-label">world · politics</div>
+      <div class="world-card-title">Political System</div>
+      <div class="world-card-sub">Factions, hierarchies, and who controls what</div>
+      <span class="world-card-status">not yet written</span>
+    </a>
+    <a href="world-cities.html" class="world-card">
+      <div class="world-card-label">world · geography</div>
+      <div class="world-card-title">The Four Cities</div>
+      <div class="world-card-sub">Where people live between stages</div>
+      <span class="world-card-status">available</span>
+    </a>
+    <a href="world-economy.html" class="world-card">
+      <div class="world-card-label">world · economy</div>
+      <div class="world-card-title">Time &amp; Currency</div>
+      <div class="world-card-sub">How value, debt, and survival are measured here</div>
+      <span class="world-card-status">available</span>
+    </a>
+    <a href="world-lore.html" class="world-card">
+      <div class="world-card-label">world · lore</div>
+      <div class="world-card-title">Lore</div>
+      <div class="world-card-sub">Myths, secrets, and unanswered questions</div>
+      <span class="world-card-status">available</span>
+    </a>
   </div>
 </div>
 </main>
 
-<div class="vsc-status">
-  <div class="status-left">
-    <span class="status-item mono">⎇ main</span>
-  </div>
-  <div class="status-right">
-    <span class="status-item mono">world building</span>
-    <span class="status-item mono">© <span id="yr"></span></span>
-  </div>
-</div>
-
-<script>
-  document.getElementById('yr').textContent = new Date().getFullYear();
-
-  const sections = document.querySelectorAll('section[id]');
-  const links    = document.querySelectorAll('.sidebar-link');
-  const crumb    = document.getElementById('breadCrumb');
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const id = e.target.id;
-        links.forEach(l => {
-          const active = l.getAttribute('href') === '#' + id;
-          l.classList.toggle('active', active);
-          if (active && l.dataset.label) crumb.textContent = l.dataset.label;
-        });
-      }
-    });
-  }, { rootMargin: '-10% 0px -70% 0px' });
-
-  sections.forEach(s => obs.observe(s));
-</script>
 </body>
 </html>
