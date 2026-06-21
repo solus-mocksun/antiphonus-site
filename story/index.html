@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>story — the fool</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .stage-card {
+      display: block;
+      background: var(--bg-2);
+      padding: 1.1rem 1.25rem;
+      text-decoration: none;
+      transition: background 0.12s;
+      border-left: 2px solid transparent;
+      position: relative;
+    }
+
+    .stage-card:hover {
+      background: var(--bg-hover);
+      border-left-color: var(--accent);
+      text-decoration: none;
+    }
+
+    .stage-card.wip {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .stage-num {
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      margin-bottom: 0.3rem;
+    }
+
+    .stage-title {
+      font-size: 0.9rem;
+      color: var(--white);
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+
+    .stage-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .stage-status {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.85rem;
+      font-size: 0.58rem;
+      color: var(--accent-2);
+      font-family: var(--mono);
+      letter-spacing: 0.06em;
+    }
+
+    .stage-card.wip .stage-status { color: var(--faint); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../index.html" class="header-logo">After all, tomorrow is another day</a>
+  <nav>
+    <ul class="header-nav">      <li><a href="../characters/index.html">characters</a></li>
+      <li><a href="../story/index.html" class="active">story</a></li>
+      <li><a href="../gallery/index.html">gallery</a></li>
+      <li><a href="../world/index.html">world</a></li>
+      <li><a href="../game/index.html">game</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="vsc-bread" style="top:56px;">
+  <a href="../index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item">story</span>
+</div>
+
+<main class="page" style="padding-top:calc(56px + 28px);">
+<div class="obs-content" style="max-width:900px">
+
+  <h1 style="margin-bottom:0.3rem">Story</h1>
+  <p class="dim mono" style="font-size:0.75rem;margin-bottom:0.5rem">22 stages · select a stage to read</p>
+
+  <div class="stage-grid" id="stageGrid">
+    <!-- rendered by story-data.js -->
+  </div>
+
+</div>
+</main>
+<footer class="site-footer">
+  <div class="footer-wip">
+    <div class="wip-glow"></div>
+    <span>work in progress · last updated: <span id="lastmod"></span></span>
+  </div>
+  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
+</footer>
+
+<script src="../js/story-data.js"></script>
+<script>
+  const grid = document.getElementById('stageGrid');
+  STORY_DATA.forEach(s => {
+    const wip = s.status !== 'draft';
+    const el = wip
+      ? `<div class="stage-card wip">`
+      : `<a href="page.html#${s.id}" class="stage-card">`;
+    const close = wip ? `</div>` : `</a>`;
+    grid.insertAdjacentHTML('beforeend',
+      el +
+      `<div class="stage-num">${s.num}</div>` +
+      `<div class="stage-title">${s.title}</div>` +
+      `<div class="stage-sub">${s.sub}</div>` +
+      `<span class="stage-status">${s.status}</span>` +
+      close
+    );
+  });
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  const d = new Date(document.lastModified);
+  const pad = n => String(n).padStart(2, "0");
+  document.getElementById("lastmod").textContent =
+    d.getFullYear() + " " +
+    d.toLocaleString("en", { month: "short" }).toLowerCase() + " " +
+    pad(d.getDate()) + " " +
+    pad(d.getHours()) + ":" + pad(d.getMinutes());
+</script>
+</body>
+</html>

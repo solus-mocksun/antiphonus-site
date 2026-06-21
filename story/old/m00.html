@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark" data-size="md">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>M00 · The Fool — the fool</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../css/style.css" />
   <style>
     /* ── READING THEMES ── */
     [data-theme="dark"]  { --read-bg:#1a1a1a; --read-text:#dcddde; --read-muted:#888; --read-border:#3d3d3d; --read-block:#242424; }
@@ -17,18 +17,21 @@
       transition: background 0.2s, color 0.2s;
     }
 
-    /* ── LAYOUT — flex so content expands when sidebar closes ── */
     .obs-layout {
       display: flex;
       min-height: calc(100vh - var(--top-offset) - var(--status-h));
     }
 
-    /* Sidebar */
     .obs-sidebar {
       width: 220px;
       min-width: 220px;
       flex-shrink: 0;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: sticky;
+      top: calc(var(--header-h) + var(--bread-h));
+      height: calc(100vh - var(--header-h) - var(--bread-h));
+      align-self: flex-start;
       transition: width 0.25s ease, min-width 0.25s ease, opacity 0.2s ease, padding 0.25s ease, border 0.25s ease;
     }
 
@@ -38,9 +41,9 @@
       opacity: 0;
       padding: 0;
       border: none;
+      overflow: hidden;
     }
 
-    /* Content: flex:1 so it fills all remaining space, content centered inside */
     .obs-content {
       flex: 1;
       min-width: 0;
@@ -51,28 +54,30 @@
       transition: padding 0.25s ease;
     }
 
-    /* The actual reading column — max-width + centered */
     .reading-inner {
       width: 100%;
       max-width: 680px;
     }
 
-    /* ── TEXT SIZE ── */
     [data-size="sm"] .reading-inner p { font-size: 0.82rem; }
     [data-size="md"] .reading-inner p { font-size: 0.93rem; }
     [data-size="lg"] .reading-inner p { font-size: 1.05rem; line-height: 2; }
     [data-size="xl"] .reading-inner p { font-size: 1.18rem; line-height: 2.1; }
 
-    /* ── READER TOOLBAR ── */
     .reader-bar {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.6rem 0;
+      padding: 0.6rem 0.75rem;
       margin-bottom: 2rem;
       border-bottom: 1px solid var(--read-border);
       flex-wrap: wrap;
       width: 100%;
+      position: sticky;
+      top: calc(var(--header-h) + var(--bread-h));
+      background: var(--read-bg);
+      z-index: 50;
+      transition: background 0.2s;
     }
 
     .reader-bar-label {
@@ -98,13 +103,8 @@
     .reader-btn:hover  { color: var(--read-text); border-color: var(--accent); }
     .reader-btn.active { color: var(--accent-2); border-color: var(--accent); background: var(--accent-dim); }
 
-    .reader-divider {
-      width: 1px; height: 16px;
-      background: var(--read-border);
-      margin: 0 0.15rem;
-    }
+    .reader-divider { width: 1px; height: 16px; background: var(--read-border); margin: 0 0.15rem; }
 
-    /* ── SIDEBAR TOGGLE ── */
     .sidebar-toggle {
       width: 26px; height: 26px;
       background: transparent;
@@ -121,7 +121,6 @@
     .sidebar-toggle:hover { color: var(--read-text); border-color: var(--accent); }
     .sidebar-toggle svg { width: 14px; height: 14px; }
 
-    /* ── STAGE NAV ── */
     .stage-nav {
       display: flex;
       justify-content: space-between;
@@ -158,14 +157,40 @@
       margin-bottom: 0.2rem;
     }
 
-    /* theme colors for content */
     .reading-inner h1,
     .reading-inner h2  { color: var(--read-text); }
     .reading-inner p   { color: var(--read-text); }
     .reading-inner blockquote { border-color: var(--accent); color: var(--read-muted); }
     .chapter-section   { color: var(--read-text); }
 
-    /* ── MOBILE: sidebar as overlay drawer ── */
+    .obs-sidebar {
+      background: var(--read-bg);
+      border-right-color: var(--read-border);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .sidebar-label { color: var(--read-muted); }
+    .sidebar-link  { color: var(--read-muted); }
+    .sidebar-link:hover { background: rgba(128,128,128,0.08); color: var(--read-text); text-decoration: none; }
+    .sidebar-link.active { color: var(--link); }
+    .sidebar-section { border-color: var(--read-border); }
+
+    .site-header {
+      background: var(--read-bg);
+      border-bottom-color: var(--read-border);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .vsc-bread {
+      background: var(--read-bg);
+      border-bottom-color: var(--read-border);
+      color: var(--read-muted);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .vsc-bread .bread-item { color: var(--read-text); }
+    .vsc-bread a.bread-item:hover { color: var(--link); }
+    .vsc-bread .bread-item:last-child { color: var(--link); }
+    .vsc-bread .bread-sep { color: var(--read-muted); }
+
     .sidebar-backdrop {
       display: none;
       position: fixed;
@@ -176,7 +201,6 @@
     }
 
     @media (max-width: 720px) {
-      /* Override global display:none — drawer handles visibility */
       .obs-layout .obs-sidebar {
         display: block !important;
         position: fixed !important;
@@ -192,47 +216,33 @@
         opacity: 1 !important;
         padding: 1rem 0 !important;
         border-right: 1px solid var(--border) !important;
-        /* Use transform instead of width for slide animation */
         transform: translateX(0) !important;
         transition: transform 0.25s ease !important;
       }
-
-      /* Closed: slide off to the left */
-      .obs-layout.sidebar-closed .obs-sidebar {
-        transform: translateX(-100%) !important;
-      }
-
-      /* Backdrop shows when sidebar is open */
-      .obs-layout:not(.sidebar-closed) .sidebar-backdrop {
-        display: block;
-      }
-
-      /* Content always full-width on mobile */
-      .obs-content {
-        padding: 2rem 1.25rem 5rem;
-      }
+      .obs-layout.sidebar-closed .obs-sidebar { transform: translateX(-100%) !important; }
+      .obs-layout:not(.sidebar-closed) .sidebar-backdrop { display: block; }
+      .obs-content { padding: 2rem 1.25rem 5rem; }
     }
   </style>
 </head>
 <body>
 
 <header class="site-header">
-  <span class="header-logo">After all, tomorrow is another day</span>
+  <a href="../index.html" class="header-logo">After all, tomorrow is another day</a>
   <nav>
     <ul class="header-nav">
-      <li><a href="index.html">overview</a></li>
-      <li><a href="characters.html">characters</a></li>
-      <li><a href="story.html" class="active">story</a></li>
-      <li><a href="gallery.html">gallery</a></li>
-      <li><a href="world.html">world</a></li>
+      <li><a href="../characters/index.html">characters</a></li>
+      <li><a href="../story/index.html" class="active">story</a></li>
+      <li><a href="../gallery/index.html">gallery</a></li>
+      <li><a href="../world/index.html">world</a></li>
     </ul>
   </nav>
 </header>
 
 <div class="vsc-bread" style="top:56px;">
-  <a href="index.html" class="bread-item">the fool</a>
+  <a href="../index.html" class="bread-item">the fool</a>
   <span class="bread-sep">›</span>
-  <a href="story.html" class="bread-item">story</a>
+  <a href="../story/index.html" class="bread-item">story</a>
   <span class="bread-sep">›</span>
   <span class="bread-item">M00 · The Fool</span>
 </div>
@@ -240,29 +250,20 @@
 <main class="page" style="padding-top:calc(56px + 28px);">
 <div class="obs-layout" id="layout">
 
-  <!-- Mobile backdrop — closes sidebar when tapped -->
   <div class="sidebar-backdrop" id="sbBackdrop" onclick="toggleSidebar()"></div>
 
-  <!-- Sidebar -->
   <aside class="obs-sidebar">
     <div class="sidebar-section">
       <span class="sidebar-label">M00 · The Fool</span>
-      <a href="#ch-1" class="sidebar-link active" data-label="M00 · chapter 1">Chapter 1</a>
-      <a href="#ch-2" class="sidebar-link"        data-label="M00 · chapter 2">Chapter 2</a>
+      <a href="#ch-1" class="sidebar-link active">Chapter 1</a>
+      <a href="#ch-2" class="sidebar-link">Chapter 2</a>
     </div>
-    <div class="sidebar-section" style="border-top:1px solid var(--border);padding-top:0.75rem;margin-top:0.5rem">
-      <span class="sidebar-label">stages</span>
-      <a href="story.html"     class="sidebar-link">← all stages</a>
-      <a href="story-m00.html" class="sidebar-link active" style="color:var(--link)">M00 · The Fool</a>
-      <a href="story-m01.html" class="sidebar-link dim">M01 · The Magician</a>
-    </div>
+    <div class="sidebar-section" style="border-top:1px solid var(--border);padding-top:0.75rem;margin-top:0.5rem" id="sidebarStages"></div>
   </aside>
 
-  <!-- Content — fills all space, reading-inner is centered inside -->
   <div class="obs-content">
   <div class="reading-inner">
 
-    <!-- Reader toolbar -->
     <div class="reader-bar">
       <button class="sidebar-toggle" onclick="toggleSidebar()" title="toggle sidebar">
         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -284,14 +285,12 @@
       <button class="reader-btn"        onclick="setSize('xl',this)">XL</button>
     </div>
 
-    <!-- Stage header -->
     <div style="margin-bottom:2.5rem">
       <span class="chapter-meta">Stage M00</span>
       <h1>The Fool</h1>
       <p class="dim" style="font-size:0.82rem;margin:0.5rem 0 0">entry · disorientation</p>
     </div>
 
-    <!-- ── CHAPTER 1 ── -->
     <section class="chapter-section" id="ch-1">
       <span class="chapter-meta">Chapter 1</span>
       <h2 style="border:none;margin-top:0">Chapter Title</h2>
@@ -302,7 +301,7 @@
       </blockquote>
 
       <div class="chapter-art">
-        <!-- <img src="art/m00-ch1.jpg" alt=""> -->
+        <!-- <img src="../art/m00-ch1.jpg" alt=""> -->
         chapter art
       </div>
 
@@ -315,23 +314,21 @@
       <p>Continue after the scene break.</p>
     </section>
 
-    <!-- ── CHAPTER 2 ── -->
     <section class="chapter-section" id="ch-2">
       <span class="chapter-meta">Chapter 2</span>
       <h2 style="border:none;margin-top:0">Chapter Title</h2>
       <p>Second chapter text.</p>
     </section>
 
-    <!-- Prev / Next -->
     <div class="stage-nav">
-      <span class="stage-nav-link disabled">
+      <a href="pro.html" class="stage-nav-link">
         <span>←</span>
         <span>
-          <span class="stage-nav-label">previous stage</span>
-          none
+          <span class="stage-nav-label">previous</span>
+          Prologue
         </span>
-      </span>
-      <a href="story-m01.html" class="stage-nav-link">
+      </a>
+      <a href="m01.html" class="stage-nav-link">
         <span>
           <span class="stage-nav-label">next stage</span>
           M01 · The Magician
@@ -345,86 +342,61 @@
 </div><!-- /obs-layout -->
 </main>
 
-  <div class="status-right">
-    <span class="status-item mono">M00 · The Fool</span>
-    <span class="status-item mono">© <span id="yr"></span></span>
+<footer class="site-footer">
+  <div class="footer-wip">
+    <div class="wip-glow"></div>
+    <span>work in progress · last updated: <span id="lastmod"></span></span>
   </div>
-</div>
+  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
+</footer>
 
+<script src="../js/story-data.js"></script>
 <script>
-  document.getElementById('yr').textContent = new Date().getFullYear();
+  /* ── SIDEBAR STAGES (auto-synced) ── */
+  (function() {
+    const sec = document.getElementById('sidebarStages');
+    if (!sec || typeof STORY_DATA === 'undefined') return;
+    let inner = '<span class="sidebar-label">stages</span>';
+    inner += '<a href="../story/index.html" class="sidebar-link">← all stages</a>';
+    STORY_DATA.forEach(s => {
+      const isActive = s.id === 'm00';
+      if (s.status !== 'draft') {
+        inner += `<span class="sidebar-link" style="color:var(--faint);pointer-events:none;cursor:default">${s.num} · ${s.title}</span>`;
+      } else {
+        inner += `<a href="${s.href}" class="sidebar-link${isActive ? ' active" style="color:var(--link)' : ''}">${s.num} · ${s.title}</a>`;
+      }
+    });
+    sec.innerHTML = inner;
+  })();
 
-  // ── Sidebar ──
-  function toggleSidebar() {
-    const closed = document.getElementById('layout').classList.toggle('sidebar-closed');
-    localStorage.setItem('sidebar', closed ? 'closed' : 'open');
-  }
-
-  // Default: closed on mobile, open on desktop (unless localStorage overrides)
-  const savedSidebar = localStorage.getItem('sidebar');
-  if (savedSidebar === 'closed' || (!savedSidebar && window.innerWidth <= 720))
-    document.getElementById('layout').classList.add('sidebar-closed');
-
-  // ── Theme ──
-  function setTheme(name, btn) {
-    document.documentElement.setAttribute('data-theme', name);
+  function setTheme(theme, btn) {
+    document.documentElement.dataset.theme = theme;
     document.querySelectorAll('.reader-btn').forEach(b => {
       if (['dark','light','sepia'].includes(b.textContent.trim())) b.classList.remove('active');
     });
     btn.classList.add('active');
-    localStorage.setItem('readTheme', name);
   }
 
-  // ── Size ──
-  function setSize(name, btn) {
-    document.documentElement.setAttribute('data-size', name);
+  function setSize(size, btn) {
+    document.documentElement.dataset.size = size;
     document.querySelectorAll('.reader-btn').forEach(b => {
       if (['S','M','L','XL'].includes(b.textContent.trim())) b.classList.remove('active');
     });
     btn.classList.add('active');
-    localStorage.setItem('readSize', name);
   }
 
-  // ── Restore prefs ──
-  const savedTheme = localStorage.getItem('readTheme');
-  const savedSize  = localStorage.getItem('readSize');
-
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.querySelectorAll('.reader-btn').forEach(b => {
-      if (['dark','light','sepia'].includes(b.textContent.trim()))
-        b.classList.toggle('active', b.textContent.trim() === savedTheme);
-    });
+  function toggleSidebar() {
+    document.getElementById('layout').classList.toggle('sidebar-closed');
   }
 
-  if (savedSize) {
-    document.documentElement.setAttribute('data-size', savedSize);
-    const map = { sm:'S', md:'M', lg:'L', xl:'XL' };
-    document.querySelectorAll('.reader-btn').forEach(b => {
-      if (['S','M','L','XL'].includes(b.textContent.trim()))
-        b.classList.toggle('active', b.textContent.trim() === map[savedSize]);
-    });
-  }
-
-  // ── Scroll spy ──
-  const sections = document.querySelectorAll('.chapter-section');
-  const links    = document.querySelectorAll('.obs-sidebar .sidebar-link[data-label]');
-  const crumb    = document.getElementById('breadCrumb');
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const id = e.target.id;
-        links.forEach(l => {
-          const active = l.getAttribute('href') === '#' + id;
-          l.classList.toggle('active', active);
-          if (active && l.dataset.label) crumb.textContent = l.dataset.label;
-        });
-      }
-    });
-  }, { rootMargin: '-10% 0px -75% 0px' });
-
-  sections.forEach(s => obs.observe(s));
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  const d = new Date(document.lastModified);
+  const pad = n => String(n).padStart(2, "0");
+  document.getElementById("lastmod").textContent =
+    d.getFullYear() + " " +
+    d.toLocaleString("en", { month: "short" }).toLowerCase() + " " +
+    pad(d.getDate()) + " " +
+    pad(d.getHours()) + ":" + pad(d.getMinutes());
 </script>
 </body>
 </html>

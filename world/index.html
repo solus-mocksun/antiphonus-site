@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>world — the fool</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../css/style.css" />
   <style>
     .world-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:2rem; }
     .world-card { display:block; background:var(--bg-2); padding:1.25rem 1.4rem; text-decoration:none; transition:background 0.12s; border-left:2px solid transparent; position:relative; }
@@ -20,18 +20,17 @@
 <body>
 
 <header class="site-header">
-  <span class="header-logo">After all, tomorrow is another day</span>
-  <nav><ul class="header-nav">
-    <li><a href="index.html">overview</a></li>
-    <li><a href="characters.html">characters</a></li>
-    <li><a href="story.html">story</a></li>
-    <li><a href="gallery.html">gallery</a></li>
-    <li><a href="world.html" class="active">world</a></li>
+  <a href="../index.html" class="header-logo">After all, tomorrow is another day</a>
+  <nav><ul class="header-nav">    <li><a href="../characters/index.html">characters</a></li>
+    <li><a href="../story/index.html">story</a></li>
+    <li><a href="../gallery/index.html">gallery</a></li>
+    <li><a href="../world/index.html" class="active">world</a></li>
+    <li><a href="../game/index.html">game</a></li>
   </ul></nav>
 </header>
 
 <div class="vsc-bread" style="top:56px;">
-  <a href="index.html" class="bread-item">the fool</a>
+  <a href="../index.html" class="bread-item">the fool</a>
   <span class="bread-sep">›</span>
   <span class="bread-item">world</span>
 </div>
@@ -45,43 +44,43 @@
     work in progress
   </div>
   <div class="world-grid">
-    <a href="world-overview.html" class="world-card">
+    <a href="overview.html" class="world-card">
       <div class="world-card-label">world · overview</div>
       <div class="world-card-title">The Game</div>
       <div class="world-card-sub">What this world is, how it works, and why it exists</div>
       <span class="world-card-status">available</span>
     </a>
-    <a href="world-stages.html" class="world-card">
+    <a href="stages.html" class="world-card">
       <div class="world-card-label">world · stages</div>
       <div class="world-card-title">The 22 Stages</div>
       <div class="world-card-sub">Each stage named for a Major Arcana — M00 through M21</div>
       <span class="world-card-status">available</span>
     </a>
-    <a href="world-history.html" class="world-card wip">
+    <a href="history.html" class="world-card wip">
       <div class="world-card-label">world · history</div>
       <div class="world-card-title">History</div>
       <div class="world-card-sub">Origins, timeline, and what came before</div>
       <span class="world-card-status">not yet written</span>
     </a>
-    <a href="world-politics.html" class="world-card wip">
+    <a href="politics.html" class="world-card wip">
       <div class="world-card-label">world · politics</div>
       <div class="world-card-title">Political System</div>
       <div class="world-card-sub">Factions, hierarchies, and who controls what</div>
       <span class="world-card-status">not yet written</span>
     </a>
-    <a href="world-cities.html" class="world-card">
+    <a href="cities.html" class="world-card">
       <div class="world-card-label">world · geography</div>
       <div class="world-card-title">The Four Cities</div>
       <div class="world-card-sub">Where people live between stages</div>
       <span class="world-card-status">available</span>
     </a>
-    <a href="world-economy.html" class="world-card">
+    <a href="economy.html" class="world-card">
       <div class="world-card-label">world · economy</div>
       <div class="world-card-title">Time &amp; Currency</div>
       <div class="world-card-sub">How value, debt, and survival are measured here</div>
       <span class="world-card-status">available</span>
     </a>
-    <a href="world-lore.html" class="world-card">
+    <a href="lore.html" class="world-card">
       <div class="world-card-label">world · lore</div>
       <div class="world-card-title">Lore</div>
       <div class="world-card-sub">Myths, secrets, and unanswered questions</div>
@@ -91,5 +90,24 @@
 </div>
 </main>
 
+
+<footer class="site-footer">
+  <div class="footer-wip">
+    <div class="wip-glow"></div>
+    <span>work in progress · last updated: <span id="lastmod"></span></span>
+  </div>
+  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
+</footer>
+
+<script>
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  const d = new Date(document.lastModified);
+  const pad = n => String(n).padStart(2, "0");
+  document.getElementById("lastmod").textContent =
+    d.getFullYear() + " " +
+    d.toLocaleString("en", { month: "short" }).toLowerCase() + " " +
+    pad(d.getDate()) + " " +
+    pad(d.getHours()) + ":" + pad(d.getMinutes());
+</script>
 </body>
 </html>

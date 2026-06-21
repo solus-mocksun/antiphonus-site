@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Political System — the fool</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../css/style.css" />
   <style>
     .world-content { max-width: 720px; padding: 2.5rem 2.5rem 6rem; }
     .world-nav { display:flex; justify-content:space-between; align-items:center; padding-top:3rem; border-top:1px solid var(--border); margin-top:3rem; }
@@ -17,19 +17,18 @@
 <body>
 
 <header class="site-header">
-  <span class="header-logo">After all, tomorrow is another day</span>
-  <nav><ul class="header-nav">
-    <li><a href="index.html">overview</a></li>
-    <li><a href="characters.html">characters</a></li>
-    <li><a href="story.html">story</a></li>
-    <li><a href="gallery.html">gallery</a></li>
-    <li><a href="world.html" class="active">world</a></li>
+  <a href="../index.html" class="header-logo">After all, tomorrow is another day</a>
+  <nav><ul class="header-nav">    <li><a href="../characters/index.html">characters</a></li>
+    <li><a href="../story/index.html">story</a></li>
+    <li><a href="../gallery/index.html">gallery</a></li>
+    <li><a href="../world/index.html" class="active">world</a></li>
+    <li><a href="../game/index.html">game</a></li>
   </ul></nav>
 </header>
 <div class="vsc-bread" style="top:56px;">
-  <a href="index.html" class="bread-item">the fool</a>
+  <a href="../index.html" class="bread-item">the fool</a>
   <span class="bread-sep">›</span>
-  <a href="world.html" class="bread-item">world</a>
+  <a href="../world/index.html" class="bread-item">world</a>
   <span class="bread-sep">›</span>
   <span class="bread-item">politics</span>
 </div>
@@ -37,7 +36,7 @@
 <main class="page" style="padding-top:calc(56px + 28px);">
 <div class="world-content">
 
-  <span style="font-size:0.65rem;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;font-family:var(--mono)"><a href="world.html" style="color:var(--muted);text-decoration:none">world</a> · politics</span>
+  <span style="font-size:0.65rem;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;font-family:var(--mono)"><a href="../world/index.html" style="color:var(--muted);text-decoration:none">world</a> · politics</span>
   <h1 style="margin-top:0.4rem;margin-bottom:2rem">Political System</h1>
 
   <div class="callout">
@@ -46,12 +45,31 @@
   </div>
 
   <div class="world-nav">
-    <a href="world-history.html" class="world-nav-link"><span>←</span><span><span class="world-nav-label">previous</span>History</span></a>
+    <a href="history.html" class="world-nav-link"><span>←</span><span><span class="world-nav-label">previous</span>History</span></a>
     <span class="world-nav-link disabled"><span><span class="world-nav-label">next</span>—</span><span>→</span></span>
   </div>
 
 </div>
 </main>
 
+
+<footer class="site-footer">
+  <div class="footer-wip">
+    <div class="wip-glow"></div>
+    <span>work in progress · last updated: <span id="lastmod"></span></span>
+  </div>
+  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
+</footer>
+
+<script>
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  const d = new Date(document.lastModified);
+  const pad = n => String(n).padStart(2, "0");
+  document.getElementById("lastmod").textContent =
+    d.getFullYear() + " " +
+    d.toLocaleString("en", { month: "short" }).toLowerCase() + " " +
+    pad(d.getDate()) + " " +
+    pad(d.getHours()) + ":" + pad(d.getMinutes());
+</script>
 </body>
 </html>

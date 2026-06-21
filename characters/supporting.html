@@ -1,0 +1,925 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>supporting cast — the fool</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-family: var(--mono);
+      margin-right: 0.4rem;
+    }
+
+    .ftag {
+      font-size: 0.62rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.18rem 0.65rem;
+      font-family: var(--mono);
+      cursor: pointer;
+      background: transparent;
+      transition: color 0.1s, border-color 0.1s, background 0.1s;
+      letter-spacing: 0.04em;
+    }
+
+    .ftag:hover { color: var(--white); border-color: var(--border2); }
+
+    /* all = accent red */
+    .ftag:nth-child(2).active  { color: #a85252; border-color: rgba(168,82,82,0.5);   background: rgba(168,82,82,0.1); }
+    /* city */
+    .ftag:nth-child(3).active  { color: #9a7abf; border-color: rgba(154,122,191,0.5); background: rgba(154,122,191,0.1); }
+    /* M00–M21 */
+    .ftag:nth-child(4).active  { color: #a87a6a; border-color: rgba(168,122,106,0.5); background: rgba(168,122,106,0.1); }
+    .ftag:nth-child(5).active  { color: #6a8aa8; border-color: rgba(106,138,168,0.5); background: rgba(106,138,168,0.1); }
+    .ftag:nth-child(6).active  { color: #6aa87a; border-color: rgba(106,168,122,0.5); background: rgba(106,168,122,0.1); }
+    .ftag:nth-child(7).active  { color: #a89a6a; border-color: rgba(168,154,106,0.5); background: rgba(168,154,106,0.1); }
+    .ftag:nth-child(8).active  { color: #a86a8a; border-color: rgba(168,106,138,0.5); background: rgba(168,106,138,0.1); }
+    .ftag:nth-child(9).active  { color: #6aa8a8; border-color: rgba(106,168,168,0.5); background: rgba(106,168,168,0.1); }
+    .ftag:nth-child(10).active { color: #8aa86a; border-color: rgba(138,168,106,0.5); background: rgba(138,168,106,0.1); }
+    .ftag:nth-child(11).active { color: #a87a52; border-color: rgba(168,122,82,0.5);  background: rgba(168,122,82,0.1); }
+    .ftag:nth-child(12).active { color: #526aa8; border-color: rgba(82,106,168,0.5);  background: rgba(82,106,168,0.1); }
+    .ftag:nth-child(13).active { color: #a85270; border-color: rgba(168,82,112,0.5);  background: rgba(168,82,112,0.1); }
+    .ftag:nth-child(14).active { color: #52a882; border-color: rgba(82,168,130,0.5);  background: rgba(82,168,130,0.1); }
+    .ftag:nth-child(15).active { color: #a8a852; border-color: rgba(168,168,82,0.5);  background: rgba(168,168,82,0.1); }
+    .ftag:nth-child(16).active { color: #7052a8; border-color: rgba(112,82,168,0.5);  background: rgba(112,82,168,0.1); }
+    .ftag:nth-child(17).active { color: #a87052; border-color: rgba(168,112,82,0.5);  background: rgba(168,112,82,0.1); }
+    .ftag:nth-child(18).active { color: #52a8a8; border-color: rgba(82,168,168,0.5);  background: rgba(82,168,168,0.1); }
+    .ftag:nth-child(19).active { color: #a85252; border-color: rgba(168,82,82,0.5);   background: rgba(168,82,82,0.1); }
+    .ftag:nth-child(20).active { color: #6a6aa8; border-color: rgba(106,106,168,0.5); background: rgba(106,106,168,0.1); }
+    .ftag:nth-child(21).active { color: #52a86a; border-color: rgba(82,168,106,0.5);  background: rgba(82,168,106,0.1); }
+    .ftag:nth-child(22).active { color: #a88a6a; border-color: rgba(168,138,106,0.5); background: rgba(168,138,106,0.1); }
+    .ftag:nth-child(23).active { color: #8aa852; border-color: rgba(138,168,82,0.5);  background: rgba(138,168,82,0.1); }
+    .ftag:nth-child(24).active { color: #a852a8; border-color: rgba(168,82,168,0.5);  background: rgba(168,82,168,0.1); }
+    .ftag:nth-child(25).active { color: #528aa8; border-color: rgba(82,138,168,0.5);  background: rgba(82,138,168,0.1); }
+
+
+    /* ── CHARACTER GRID ── */
+    .cast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .cast-card {
+      background: var(--bg-2);
+      padding: 1.1rem 1.1rem 1.1rem;
+      cursor: pointer;
+      transition: background 0.12s;
+      border-left: 2px solid transparent;
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+
+    .cast-card:hover {
+      background: var(--bg-hover);
+      border-left-color: var(--accent);
+    }
+
+    /* passport photo — small, portrait ratio, left side */
+    .card-pfp {
+      width: 69px;
+      flex-shrink: 0;
+      aspect-ratio: 2 / 3;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-pfp img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-pfp-empty {
+      font-size: 0.45rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-family: var(--mono);
+      text-align: center;
+      line-height: 1.4;
+      padding: 0.25rem;
+    }
+
+    .card-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .cast-card.hidden { display: none; }
+
+    .card-id {
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-family: var(--mono);
+      margin-bottom: 0.2rem;
+    }
+
+    .card-name {
+      font-size: 0.95rem;
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+      font-family: var(--mono);
+    }
+
+    .card-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+      line-height: 1.5;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .card-tag {
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.4rem;
+      font-family: var(--mono);
+    }
+
+    .card-tag.m00  { color: #a85252; border-color: rgba(168,82,82,0.4); }
+    .card-tag.m01  { color: #7a9abf; border-color: rgba(122,154,191,0.4); }
+    .card-tag.m02  { color: #7ab87a; border-color: rgba(122,184,122,0.4); }
+    .card-tag.m03  { color: #bf9a5a; border-color: rgba(191,154,90,0.4); }
+    .card-tag.m04  { color: #bf7a9a; border-color: rgba(191,122,154,0.4); }
+    .card-tag.m05  { color: #8abfbf; border-color: rgba(138,191,191,0.4); }
+    .card-tag.m06  { color: #9abf7a; border-color: rgba(154,191,122,0.4); }
+    .card-tag.m07  { color: #bf8a5a; border-color: rgba(191,138,90,0.4); }
+    .card-tag.m08  { color: #5a8abf; border-color: rgba(90,138,191,0.4); }
+    .card-tag.m09  { color: #bf5a7a; border-color: rgba(191,90,122,0.4); }
+    .card-tag.m10  { color: #7abf9a; border-color: rgba(122,191,154,0.4); }
+    .card-tag.m11  { color: #bfbf5a; border-color: rgba(191,191,90,0.4); }
+    .card-tag.m12  { color: #8a5abf; border-color: rgba(138,90,191,0.4); }
+    .card-tag.m13  { color: #bf7a5a; border-color: rgba(191,122,90,0.4); }
+    .card-tag.m14  { color: #5abfbf; border-color: rgba(90,191,191,0.4); }
+    .card-tag.m15  { color: #bf5a5a; border-color: rgba(191,90,90,0.4); }
+    .card-tag.m16  { color: #7a7abf; border-color: rgba(122,122,191,0.4); }
+    .card-tag.m17  { color: #5abf7a; border-color: rgba(90,191,122,0.4); }
+    .card-tag.m18  { color: #bf9a7a; border-color: rgba(191,154,122,0.4); }
+    .card-tag.m19  { color: #9abf5a; border-color: rgba(154,191,90,0.4); }
+    .card-tag.m20  { color: #bf5abf; border-color: rgba(191,90,191,0.4); }
+    .card-tag.m21  { color: #5a9abf; border-color: rgba(90,154,191,0.4); }
+    .card-tag.city { color: #9a7abf; border-color: rgba(154,122,191,0.4); }
+    .card-tag.pro  { color: #b89060; border-color: rgba(184,144,96,0.4); }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,10,0.85);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    /* ── POLICE FILE MODAL ── */
+    .modal-file {
+      background: var(--bg-2);
+      border: 1px solid var(--border2);
+      width: 100%;
+      max-width: 680px;
+      max-height: 88vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 0 60px rgba(0,0,0,0.7);
+    }
+
+    /* file header — tape strip */
+    .file-header {
+      background: var(--bg-3);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .file-stamp {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      font-family: var(--mono);
+      margin-bottom: 0.3rem;
+    }
+
+    .file-subject {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      font-family: var(--mono);
+      letter-spacing: -0.01em;
+    }
+
+    .file-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    .file-close {
+      background: none;
+      border: 1px solid var(--red);
+      color: var(--red);
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 0.18rem 0.4rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.1s, border-color 0.1s, background 0.1s;
+      line-height: 1;
+    }
+
+    .file-close:hover { background: var(--red); color: #fff; }
+
+    /* classification tape */
+    .file-tape {
+      background: var(--accent);
+      padding: 0.25rem 1.5rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      font-family: var(--mono);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .file-tape span { opacity: 0.55; }
+    .file-tape-blocks { opacity: 1; flex: 1; overflow: hidden; min-width: 0; white-space: nowrap; }
+
+    /* file body */
+    .file-body {
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    /* photo placeholder */
+    .file-photo {
+      aspect-ratio: 3/4;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .file-photo-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-family: var(--mono);
+    }
+
+    .file-photo-icon {
+      font-size: 2rem;
+      opacity: 0.15;
+    }
+
+    /* field table */
+    .file-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .file-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      border-bottom: 1px solid var(--border);
+      padding: 0.35rem 0;
+      font-size: 0.78rem;
+    }
+
+    .file-row:last-child { border-bottom: none; }
+
+    .file-key {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-family: var(--mono);
+      padding-top: 0.1rem;
+    }
+
+    .file-val {
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .file-val.empty { color: var(--faint); font-style: italic; }
+
+    /* palette section */
+    .file-palette {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 1.5rem 1rem;
+    }
+
+    /* notes section */
+    .file-notes {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+    }
+
+    .file-notes-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-family: var(--mono);
+      margin-bottom: 0.75rem;
+    }
+
+    .file-notes-text {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.8;
+      font-family: var(--mono);
+    }
+
+    /* tags row in modal */
+    .file-tags {
+      padding: 0.75rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    /* linked photos section */
+    .file-photos {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .file-photos-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-family: var(--mono);
+      margin-bottom: 0.85rem;
+    }
+
+    .file-photos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 4px;
+    }
+
+    .file-photo-thumb {
+      aspect-ratio: 1 / 1;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .file-photo-thumb:hover { border-color: var(--border2); }
+
+    .file-photo-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .file-photo-thumb .thumb-ph {
+      font-size: 0.55rem;
+      color: var(--faint);
+      font-family: var(--mono);
+      letter-spacing: 0.08em;
+      text-align: center;
+      padding: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .file-photos-empty {
+      font-size: 0.75rem;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-style: italic;
+    }
+
+    /* scrollbar */
+    .modal-file::-webkit-scrollbar { width: 4px; }
+    .modal-file::-webkit-scrollbar-track { background: transparent; }
+    .modal-file::-webkit-scrollbar-thumb { background: var(--border2); }
+
+    @media (max-width: 580px) {
+      .file-body { grid-template-columns: 1fr; }
+      .file-photo { aspect-ratio: 2/1; }
+      .cast-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 400px) {
+      .cast-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <a href="../index.html" class="header-logo">After all, tomorrow is another day</a>
+  <nav>
+    <ul class="header-nav">
+      <li><a href="../characters/index.html" class="active">characters</a></li>
+      <li><a href="../story/index.html">story</a></li>
+      <li><a href="../gallery/index.html">gallery</a></li>
+      <li><a href="../world/index.html">world</a></li>
+      <li><a href="../game/index.html">game</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- ── BREADCRUMB ── -->
+<div class="vsc-bread" style="top:56px;">
+  <a href="../index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <a href="../characters/index.html" class="bread-item">characters</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item">supporting cast</span>
+</div>
+
+<main class="page" style="padding-top:calc(56px + 28px);">
+<div class="wrap" style="padding-top:1.5rem;">
+
+  <div class="inner-tabs">
+    <a href="index.html" class="inner-tab">Main Cast</a>
+    <button class="inner-tab active">Supporting</button>
+  </div>
+
+  <p class="dim mono" style="font-size:0.72rem;margin-bottom:1.5rem">// SUPPORTING CAST — CASE FILES</p>
+
+  <!-- ── FILTER BAR ── -->
+  <div class="filter-bar">
+    <span class="filter-label">stage ·</span>
+    <button class="ftag active" onclick="filterCast('all',  this)">all</button>
+    <button class="ftag"        onclick="filterCast('city', this)">city</button>
+    <button class="ftag"        onclick="filterCast('m00',  this)">M00</button>
+    <button class="ftag"        onclick="filterCast('m01',  this)">M01</button>
+    <button class="ftag"        onclick="filterCast('m02',  this)">M02</button>
+    <button class="ftag"        onclick="filterCast('m03',  this)">M03</button>
+    <button class="ftag"        onclick="filterCast('m04',  this)">M04</button>
+    <button class="ftag"        onclick="filterCast('m05',  this)">M05</button>
+    <button class="ftag"        onclick="filterCast('m06',  this)">M06</button>
+    <button class="ftag"        onclick="filterCast('m07',  this)">M07</button>
+    <button class="ftag"        onclick="filterCast('m08',  this)">M08</button>
+    <button class="ftag"        onclick="filterCast('m09',  this)">M09</button>
+    <button class="ftag"        onclick="filterCast('m10',  this)">M10</button>
+    <button class="ftag"        onclick="filterCast('m11',  this)">M11</button>
+    <button class="ftag"        onclick="filterCast('m12',  this)">M12</button>
+    <button class="ftag"        onclick="filterCast('m13',  this)">M13</button>
+    <button class="ftag"        onclick="filterCast('m14',  this)">M14</button>
+    <button class="ftag"        onclick="filterCast('m15',  this)">M15</button>
+    <button class="ftag"        onclick="filterCast('m16',  this)">M16</button>
+    <button class="ftag"        onclick="filterCast('m17',  this)">M17</button>
+    <button class="ftag"        onclick="filterCast('m18',  this)">M18</button>
+    <button class="ftag"        onclick="filterCast('m19',  this)">M19</button>
+    <button class="ftag"        onclick="filterCast('m20',  this)">M20</button>
+    <button class="ftag"        onclick="filterCast('m21',  this)">M21</button>
+  </div>
+
+  <!-- ── CAST GRID ── -->
+  <div class="cast-grid" id="castGrid">
+
+    <!-- CARD 01 -->
+    <div class="cast-card" data-stages="m00" onclick="openFile(0)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #003</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags"><span class="card-tag m00">M00</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 02 -->
+    <div class="cast-card" data-stages="m00" onclick="openFile(1)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #004</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags"><span class="card-tag m00">M00</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 03 -->
+    <div class="cast-card" data-stages="m00" onclick="openFile(2)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #005</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags"><span class="card-tag m00">M00</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 04 -->
+    <div class="cast-card" data-stages="m00 m01" onclick="openFile(3)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #006</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags">
+          <span class="card-tag m00">M00</span>
+          <span class="card-tag m01">M01</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 05 -->
+    <div class="cast-card" data-stages="m01" onclick="openFile(4)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #007</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags"><span class="card-tag m01">M01</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 06 -->
+    <div class="cast-card" data-stages="m01 m02" onclick="openFile(5)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #008</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags">
+          <span class="card-tag m01">M01</span>
+          <span class="card-tag m02">M02</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 07 -->
+    <div class="cast-card" data-stages="m02" onclick="openFile(6)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #009</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags"><span class="card-tag m02">M02</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 08 -->
+    <div class="cast-card" data-stages="m02 m03" onclick="openFile(7)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #010</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags">
+          <span class="card-tag m02">M02</span>
+          <span class="card-tag m03">M03</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 09 -->
+    <div class="cast-card" data-stages="m03" onclick="openFile(8)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #011</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags"><span class="card-tag m03">M03</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 10 -->
+    <div class="cast-card" data-stages="city" onclick="openFile(9)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #012</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags"><span class="card-tag city">city</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 11 -->
+    <div class="cast-card" data-stages="city" onclick="openFile(10)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #013</div>
+        <div class="card-name">— — —</div>
+        <div class="card-sub">unknown · — — —</div>
+        <div class="card-tags"><span class="card-tag city">city</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 12 -->
+    <div class="cast-card" data-stages="pro m00" onclick="openFile(11)">
+      <div class="card-pfp"><span class="card-pfp-empty">no image</span></div>
+      <div class="card-info">
+        <div class="card-id">FILE #014</div>
+        <div class="card-name">Katherine</div>
+        <div class="card-sub">Katy · mid-twenties · F</div>
+        <div class="card-tags">
+          <span class="card-tag pro">PRO</span>
+          <span class="card-tag m00">M00</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /castGrid -->
+
+</div><!-- /wrap -->
+</main>
+
+<!-- ── MODAL OVERLAY ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeFile(event)">
+  <div class="modal-file" id="modalFile">
+
+    <div class="file-header">
+      <div>
+        <div class="file-stamp" id="fileStamp">case file · subject unknown</div>
+        <div class="file-subject" id="fileSubject">— — —</div>
+      </div>
+      <div class="file-header-actions">
+        <button class="file-close" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+
+    <div class="file-tape">
+      <span>classified</span>
+      <span class="file-tape-blocks">████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████</span>
+      <span id="fileId">FILE #000</span>
+    </div>
+
+    <div class="file-body">
+      <div class="file-photo">
+        <div class="file-photo-icon">◻</div>
+        <div class="file-photo-label">no image</div>
+      </div>
+      <div class="file-fields" id="fileFields">
+        <div class="file-row">
+          <span class="file-key">name</span>
+          <span class="file-val empty" id="f-name">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">tag / id</span>
+          <span class="file-val empty" id="f-tag">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">age</span>
+          <span class="file-val empty" id="f-age">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">gender</span>
+          <span class="file-val empty" id="f-gender">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">status</span>
+          <span class="file-val empty" id="f-status">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">height</span>
+          <span class="file-val empty" id="f-height">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">build</span>
+          <span class="file-val empty" id="f-build">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">hair</span>
+          <span class="file-val empty" id="f-hair">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">eyes</span>
+          <span class="file-val empty" id="f-eyes">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">role</span>
+          <span class="file-val empty" id="f-role">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">first seen</span>
+          <span class="file-val empty" id="f-first">—</span>
+        </div>
+        <div class="file-row">
+          <span class="file-key">last seen</span>
+          <span class="file-val empty" id="f-last">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="file-tags" id="fileTags"></div>
+
+    <div class="file-palette" id="filePaletteSection">
+      <div class="file-notes-label">// color palette</div>
+      <div class="swatch-row" id="filePalette" style="gap:0; margin-top:0.5rem;"></div>
+    </div>
+
+    <div class="file-notes">
+      <div class="file-notes-label">// investigator notes</div>
+      <div class="file-notes-text" id="fileNotes">— no notes on file —</div>
+    </div>
+
+    <div class="file-photos">
+      <div class="file-photos-label">// linked photos — gallery</div>
+      <div id="filePhotosGrid" class="file-photos-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="footer-wip">
+    <div class="wip-glow"></div>
+    <span>work in progress · last updated: <span id="lastmod"></span></span>
+  </div>
+  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
+</footer>
+
+<script src="../js/gallery-data.js"></script>
+<script>
+  /* ── CHARACTER DATA ── */
+  const CAST = [
+    { id: 'FILE #003', name: '— — —', sub: 'unknown', stages: ['m00'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M00', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #004', name: '— — —', sub: 'unknown', stages: ['m00'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M00', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #005', name: '— — —', sub: 'unknown', stages: ['m00'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M00', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #006', name: '— — —', sub: 'unknown', stages: ['m00','m01'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M00', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #007', name: '— — —', sub: 'unknown', stages: ['m01'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M01', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #008', name: '— — —', sub: 'unknown', stages: ['m01','m02'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M01', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #009', name: '— — —', sub: 'unknown', stages: ['m02'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M02', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #010', name: '— — —', sub: 'unknown', stages: ['m02','m03'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M02', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #011', name: '— — —', sub: 'unknown', stages: ['m03'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'M03', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #012', name: '— — —', sub: 'unknown', stages: ['city'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'city', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #013', name: '— — —', sub: 'unknown', stages: ['city'], role: '—', age: '—', gender: '—', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: '—', first: 'city', last: '—', notes: '—', palette: [] },
+    { id: 'FILE #014', name: 'Katherine', sub: 'Katy · mid-twenties · F', stages: ['pro', 'm00'], role: 'ally', age: 'mid-twenties', gender: 'female', status: '—', height: '—', build: '—', hair: '—', eyes: '—', tag: 'Katy', first: 'Prologue', last: '—', notes: 'Known as Katy in M00. The girl from the engine room. Enters terrified. Discovers fear is not the same as weakness. Survives further than expected — one of the significant losses in the later stages. Her arc is about what courage actually looks like in a place that keeps testing it.', palette: [] },
+  ];
+
+  const TAG_COLORS = { m00: '#a85252', m01: '#7a9abf', m02: '#7ab87a', m03: '#bf9a5a', m04: '#bf7a9a', m05: '#8abfbf', city: '#9a7abf' };
+
+  /* ── FILTER ── */
+  function filterCast(stage, btn) {
+    document.querySelectorAll('.ftag').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.cast-card').forEach(card => {
+      const stages = card.dataset.stages || '';
+      card.classList.toggle('hidden', stage !== 'all' && !stages.includes(stage));
+    });
+  }
+
+  /* ── OPEN MODAL ── */
+  function openFile(idx) {
+    const c = CAST[idx];
+    document.getElementById('fileStamp').textContent = 'case file · subject ' + (c.name === '— — —' ? 'unknown' : c.name.toLowerCase());
+    document.getElementById('fileSubject').textContent = c.name;
+    document.getElementById('fileId').textContent = c.id;
+
+    const set = (id, val) => {
+      const el = document.getElementById(id);
+      el.textContent = val;
+      el.className = 'file-val' + (val === '—' ? ' empty' : '');
+    };
+    set('f-name',   c.name);
+    set('f-tag',    c.tag);
+    set('f-age',    c.age);
+    set('f-gender', c.gender);
+    set('f-status', c.status);
+    set('f-height', c.height);
+    set('f-build',  c.build);
+    set('f-hair',   c.hair);
+    set('f-eyes',   c.eyes);
+    set('f-role',   c.role);
+    set('f-first',  c.first);
+    set('f-last',   c.last);
+
+    document.getElementById('fileNotes').textContent = c.notes === '—' ? '— no notes on file —' : c.notes;
+
+    const palette = c.palette || [];
+    const palEl = document.getElementById('filePalette');
+    if (palette.length) {
+      palEl.innerHTML = palette.map(col =>
+        `<div class="swatch" title="${col}" style="background:${col}; width:28px; height:28px;"></div>`
+      ).join('');
+    } else {
+      palEl.innerHTML = '<span style="font-size:0.75rem; color:var(--faint); font-style:italic;">— no palette on file —</span>';
+    }
+
+    const tagsEl = document.getElementById('fileTags');
+    tagsEl.innerHTML = c.stages.map(s =>
+      `<span class="card-tag ${s}" style="font-size:0.6rem">${s.toUpperCase()}</span>`
+    ).join('');
+
+    /* ── LINKED PHOTOS ── */
+    const charKey = c.name === '— — —' ? null : c.name.toLowerCase().replace(/\s+/g, '');
+    const photosGrid = document.getElementById('filePhotosGrid');
+    photosGrid.innerHTML = '';
+    const matched = charKey ? (GALLERY_DATA || []).filter(g => g.tags.some(t => t === charKey)) : [];
+    if (matched.length === 0) {
+      photosGrid.innerHTML = '<span class="file-photos-empty">— no linked photos —</span>';
+    } else {
+      matched.forEach(g => {
+        const inner = g.src
+          ? `<img src="${g.src}" alt="${g.caption}" />`
+          : `<div class="thumb-ph">${g.caption}</div>`;
+        photosGrid.insertAdjacentHTML('beforeend', `<div class="file-photo-thumb" title="${g.caption}">${inner}</div>`);
+      });
+    }
+
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => { document.getElementById('modalFile').scrollTop = 0; });
+  }
+
+  /* ── CLOSE MODAL ── */
+  function closeModal() {
+    const overlay = document.getElementById('modalOverlay');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeFile(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* ── AUTO-OPEN via ?open=name ── */
+  const _openParam = new URLSearchParams(window.location.search).get('open');
+  if (_openParam) {
+    const _idx = CAST.findIndex(c => c.name.toLowerCase() === _openParam.toLowerCase());
+    if (_idx !== -1) openFile(_idx);
+  }
+
+  /* ── FOOTER ── */
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const d = new Date(document.lastModified);
+  const pad = n => String(n).padStart(2, '0');
+  document.getElementById('lastmod').textContent =
+    d.getFullYear() + ' ' +
+    d.toLocaleString('en', { month: 'short' }).toLowerCase() + ' ' +
+    pad(d.getDate()) + ' ' +
+    pad(d.getHours()) + ':' + pad(d.getMinutes());
+</script>
+</body>
+</html>

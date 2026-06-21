@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gallery — the fool</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .gallery-header {
+      padding: 2rem 2.5rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .gallery-wrap { padding: 1.5rem 2.5rem 5rem; }
+
+    .gallery-empty {
+      padding: 4rem 0;
+      text-align: center;
+      color: var(--faint);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      font-family: var(--mono);
+    }
+
+    @media (max-width: 600px) {
+      .gallery-header { padding: 1.5rem 1.25rem 1rem; }
+      .gallery-wrap   { padding: 1rem 1.25rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../index.html" class="header-logo">After all, tomorrow is another day</a>
+  <nav>
+    <ul class="header-nav">      <li><a href="../characters/index.html">characters</a></li>
+      <li><a href="../story/index.html">story</a></li>
+      <li><a href="../gallery/index.html" class="active">gallery</a></li>
+      <li><a href="../world/index.html">world</a></li>
+      <li><a href="../game/index.html">game</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="vsc-bread" style="top:56px;">
+  <a href="../index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item">gallery</span>
+</div>
+
+<main class="page" style="padding-top:calc(56px + 28px);">
+
+  <div class="gallery-header">
+    <div>
+      <h1 style="margin-bottom:0.25rem">Gallery</h1>
+      <p style="margin:0;font-size:0.78rem;color:var(--muted);font-family:var(--mono)">concept art &amp; illustrations</p>
+    </div>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all"         onclick="filter('all')">all</button>
+      <button class="filter-btn"        data-filter="character"   onclick="filter('character')">character</button>
+      <button class="filter-btn"        data-filter="environment" onclick="filter('environment')">environment</button>
+      <button class="filter-btn"        data-filter="concept-art" onclick="filter('concept-art')">concept art</button>
+      <button class="filter-btn"        data-filter="anti"        onclick="filter('anti')">anti</button>
+      <button class="filter-btn"        data-filter="nyx"         onclick="filter('nyx')">nyx</button>
+    </div>
+  </div>
+
+  <div class="gallery-wrap">
+    <div class="gallery-grid" id="galleryGrid">
+
+      <!-- rendered by gallery-data.js -->
+    </div>
+
+    <div class="gallery-empty" id="emptyMsg" style="display:none">
+      no art in this category yet
+    </div>
+  </div>
+
+</main>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" onclick="closeLb(event)">
+  <button class="lb-close" onclick="closeLb()">close ×</button>
+  <img id="lbImg" src="" alt="" />
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-wip">
+    <div class="wip-glow"></div>
+    <span>work in progress · last updated: <span id="lastmod"></span></span>
+  </div>
+  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
+</footer>
+
+<script src="../js/gallery-data.js"></script>
+<script>
+  /* ── RENDER GRID FROM DATA ── */
+  const grid = document.getElementById('galleryGrid');
+  GALLERY_DATA.forEach((item, i) => {
+    const tagStr = item.tags.join(' ');
+    const inner = item.src
+      ? `<img src="${item.src}" alt="${item.caption}" style="width:100%;height:100%;object-fit:cover;display:block;" />`
+      : `<div class="g-ph ${item.orient}">${item.caption.toLowerCase()}</div>`;
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="g-item" data-tag="${tagStr}" data-idx="${i}" onclick="openLb(this)">
+        ${inner}
+        <div class="g-overlay">
+          <div class="g-caption">${item.caption}<span class="g-tag">${item.hashtags}</span></div>
+        </div>
+      </div>`);
+  });
+
+  /* ── FILTER ── */
+  let currentFilter = 'all';
+  function filter(tag) {
+    currentFilter = tag;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === tag));
+    let visible = 0;
+    document.querySelectorAll('.g-item').forEach(el => {
+      const show = tag === 'all' || el.dataset.tag.split(' ').includes(tag);
+      el.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('emptyMsg').style.display = visible === 0 ? '' : 'none';
+  }
+
+  /* ── LIGHTBOX ── */
+  function openLb(el) {
+    const idx = parseInt(el.dataset.idx, 10);
+    const item = GALLERY_DATA[idx];
+    const lb = document.getElementById('lb');
+    const img = document.getElementById('lbImg');
+    if (item.src) { img.src = item.src; img.style.display = ''; }
+    else { img.src = ''; img.style.display = 'none'; }
+    document.getElementById('lbCaption').textContent = item.caption + '  ' + item.hashtags;
+    lb.classList.add('open');
+    lb.dataset.idx = idx;
+  }
+  function closeLb(e) {
+    if (e && e.target !== document.getElementById('lb') && !e.target.classList.contains('lb-close')) return;
+    document.getElementById('lb').classList.remove('open');
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lb').classList.remove('open'); });
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  const d = new Date(document.lastModified);
+  const pad = n => String(n).padStart(2, "0");
+  document.getElementById("lastmod").textContent =
+    d.getFullYear() + " " +
+    d.toLocaleString("en", { month: "short" }).toLowerCase() + " " +
+    pad(d.getDate()) + " " +
+    pad(d.getHours()) + ":" + pad(d.getMinutes());
+</script>
+</body>
+</html>

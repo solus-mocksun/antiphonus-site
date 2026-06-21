@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-size="md">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>the fool</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    [data-theme="dark"]  { --read-bg:#1a1a1a; --read-text:#dcddde; --read-muted:#888; --read-border:#3d3d3d; --read-block:#242424; --accent:#4a7fa8; --accent-2:#6a9fc4; --link:#6a9fc4; --faint:#404040; --accent-dim:rgba(74,127,168,0.15); --quote-color:rgba(160,160,160,0.55); }
+    [data-theme="light"] { --read-bg:#f5f5f5; --read-text:#1a1a1a; --read-muted:#5a5a5a; --read-border:#e0e0e0; --read-block:#efefef; --accent:#4a4a4a; --accent-2:#626262; --link:#5a5a5a; --faint:#b0b0b0; --accent-dim:rgba(74,74,74,0.08); --quote-color:rgba(90,90,90,0.65); }
+    [data-theme="sepia"] { --read-bg:#f4ead8; --read-text:#3b2f1e; --read-muted:#8a7560; --read-border:#d4c4a8; --read-block:#ede3ce; --accent:#7c4a1e; --accent-2:#9a5c28; --link:#7c4a1e; --faint:#c4ae8a; --accent-dim:rgba(124,74,30,0.1); --quote-color:rgba(155,140,80,0.7); }
+
+    body { background: var(--read-bg); color: var(--read-text); transition: background 0.2s, color 0.2s; }
+
+    .obs-layout { display: flex; min-height: calc(100vh - var(--top-offset) - var(--status-h)); }
+
+    .obs-sidebar {
+      width: 220px; min-width: 220px; flex-shrink: 0;
+      overflow-y: auto; overflow-x: hidden;
+      position: sticky;
+      top: calc(var(--header-h) + var(--bread-h));
+      height: calc(100vh - var(--header-h) - var(--bread-h));
+      align-self: flex-start;
+      background: var(--read-bg);
+      border-right-color: var(--read-border);
+      transition: width 0.25s ease, min-width 0.25s ease, opacity 0.2s ease, padding 0.25s ease, border 0.25s ease, background 0.2s, border-color 0.2s;
+    }
+
+    .obs-layout.sidebar-closed .obs-sidebar { width: 0; min-width: 0; opacity: 0; padding: 0; border: none; overflow: hidden; }
+
+    .obs-content { flex: 1; min-width: 0; padding: 2.5rem 2rem 6rem; display: flex; flex-direction: column; align-items: center; }
+
+    .reading-inner { width: 100%; max-width: 680px; }
+
+    [data-size="sm"] .reading-inner p { font-size: 0.82rem; }
+    [data-size="md"] .reading-inner p { font-size: 0.93rem; }
+    [data-size="lg"] .reading-inner p { font-size: 1.05rem; line-height: 2; }
+    [data-size="xl"] .reading-inner p { font-size: 1.18rem; line-height: 2.1; }
+
+    /* reader toolbar */
+    .reader-bar {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 0.75rem; margin-bottom: 2rem;
+      border-bottom: 1px solid var(--read-border); flex-wrap: wrap; width: 100%;
+      position: sticky; top: calc(var(--header-h) + var(--bread-h));
+      background: var(--read-bg); z-index: 50; transition: background 0.2s;
+    }
+    .reader-bar-label { font-size: 0.6rem; color: var(--read-muted); text-transform: uppercase; letter-spacing: 0.12em; font-family: var(--mono); }
+    .reader-btn { font-family: var(--mono); font-size: 0.68rem; padding: 0.25rem 0.65rem; border: 1px solid var(--read-border); background: transparent; color: var(--read-muted); cursor: pointer; border-radius: 2px; transition: all 0.12s; }
+    .reader-btn:hover  { color: var(--read-text); border-color: var(--accent); }
+    .reader-btn.active { color: var(--accent-2); border-color: var(--accent); background: var(--accent-dim); }
+    .reader-divider { width: 1px; height: 16px; background: var(--read-border); margin: 0 0.15rem; }
+
+    .sidebar-toggle { width: 26px; height: 26px; background: transparent; border: 1px solid var(--read-border); border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--read-muted); transition: color 0.12s, border-color 0.12s; padding: 0; flex-shrink: 0; }
+    .sidebar-toggle:hover { color: var(--read-text); border-color: var(--accent); }
+    .sidebar-toggle svg { width: 14px; height: 14px; }
+
+    /* chapter nav */
+    .chapter-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 3rem; border-top: 1px solid var(--read-border); margin-top: 3rem; width: 100%;
+    }
+    .chapter-nav-link {
+      font-size: 0.78rem; color: var(--read-muted); text-decoration: none;
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1rem; border: 1px solid var(--read-border);
+      background: var(--read-block); transition: color 0.12s, border-color 0.12s;
+      cursor: pointer;
+    }
+    .chapter-nav-link:hover { color: var(--accent-2); border-color: var(--accent); text-decoration: none; }
+    .chapter-nav-link.disabled { opacity: 0.25; pointer-events: none; }
+    .chapter-nav-label { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; font-family: var(--mono); display: block; color: var(--read-muted); margin-bottom: 0.2rem; }
+
+    /* reading content */
+    .reading-inner h1, .reading-inner h2 { color: var(--read-text); }
+    .reading-inner p   { color: var(--read-text); }
+    .reading-inner blockquote { border-color: var(--accent); color: var(--read-muted); }
+
+    /* sidebar */
+    .sidebar-label { color: var(--read-muted); }
+    .sidebar-link  { color: var(--read-muted); }
+    .sidebar-link:hover { background: rgba(128,128,128,0.08); color: var(--read-text); text-decoration: none; }
+    .sidebar-link.active { color: var(--link); }
+    .sidebar-section { border-color: var(--read-border); }
+
+    /* header / breadcrumb follow theme */
+    .site-header { background: var(--read-bg); border-bottom-color: var(--read-border); transition: background 0.2s, border-color 0.2s; }
+    .site-header .header-logo { color: var(--read-text); }
+    .site-header .header-logo:hover { text-decoration: none; }
+    .site-header .header-nav a { color: var(--read-muted); }
+    .site-header .header-nav a:hover  { color: var(--read-border); }
+    .site-header .header-nav a.active { color: var(--read-text); }
+    .vsc-bread { background: var(--read-bg); border-bottom-color: var(--read-border); color: var(--read-muted); transition: background 0.2s, border-color 0.2s; }
+    [data-theme="sepia"] .site-header,
+    [data-theme="sepia"] .vsc-bread { background: var(--read-block); }
+    [data-theme="light"] .site-header,
+    [data-theme="light"] .vsc-bread { background: var(--read-bg); }
+    .vsc-bread .bread-item { color: var(--read-text); }
+    .vsc-bread a.bread-item:hover { color: var(--link); }
+    .vsc-bread .bread-item:last-child { color: var(--link); }
+    .vsc-bread .bread-sep { color: var(--read-muted); }
+
+    .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 89; cursor: pointer; }
+
+    /* ── character name mentions ── */
+    .char-mention {
+      cursor: pointer;
+      color: var(--read-muted);
+      border-bottom: 1px dotted var(--read-muted);
+      transition: opacity 0.1s;
+    }
+    .char-mention:hover { opacity: 0.75; }
+
+    /* ── spoken dialogue  <q data-speaker="anti"> ── */
+    q[data-speaker] { quotes: none; font-style: italic; color: var(--quote-color); }
+    q[data-speaker]::before, q[data-speaker]::after { content: none; }
+
+    /* ── character side panel ── */
+    #charPanelBackdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 149;
+    }
+    #charPanelBackdrop.open { display: block; }
+
+    #charPanel {
+      position: fixed;
+      top: calc(var(--header-h) + var(--bread-h));
+      right: -320px;
+      width: 300px;
+      bottom: 0;
+      background: var(--read-bg);
+      border-left: 1px solid var(--read-border);
+      z-index: 150;
+      transition: right 0.25s ease, background 0.2s, border-color 0.2s;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    #charPanel.open { right: 0; }
+
+    .char-panel-topbar {
+      display: flex; justify-content: flex-end;
+      padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--read-border);
+      background: var(--read-bg); position: sticky; top: 0; z-index: 1;
+    }
+    .char-panel-close {
+      background: none; border: 1px solid var(--read-border);
+      color: var(--read-muted); font-family: var(--mono); font-size: 0.65rem;
+      cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 2px;
+      transition: color 0.1s, border-color 0.1s;
+    }
+    .char-panel-close:hover { color: var(--read-text); border-color: var(--read-text); }
+    #charPanelInner { padding: 1.25rem; }
+    .cp-pal-v  { display: flex; flex-direction: column; width: 14px; flex-shrink: 0; border-radius: 2px; overflow: hidden; border: 1px solid rgba(0,0,0,0.18); }
+    .cp-pal-v span { flex: 1; display: block; }
+    .cp-header { display: flex; align-items: stretch; gap: 0.6rem; margin-bottom: 0.9rem; }
+    .cp-info   { flex: 1; min-width: 0; }
+    .cp-portrait {
+      width: 88px; aspect-ratio: 3 / 4; flex-shrink: 0; overflow: hidden;
+      border: 1px solid var(--read-border); background: var(--read-block);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cp-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cp-portrait-ph { font-size: 0.46rem; color: var(--read-muted); font-family: var(--mono); letter-spacing: 0.06em; text-transform: uppercase; text-align: center; }
+    .cp-panel-name { font-size: 1.05rem; font-weight: 600; font-family: var(--mono); margin-bottom: 0.15rem; }
+    .cp-panel-sub  { font-size: 0.65rem; color: var(--read-muted); font-family: var(--mono); letter-spacing: 0.04em; }
+    .cp-panel-row {
+      display: grid; grid-template-columns: 90px 1fr;
+      border-bottom: 1px solid var(--read-border);
+      padding: 0.3rem 0; gap: 0.5rem;
+    }
+    .cp-panel-key { font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--read-muted); font-family: var(--mono); padding-top: 0.1rem; }
+    .cp-panel-val { font-size: 0.75rem; color: var(--read-text); font-family: var(--mono); line-height: 1.4; }
+    .cp-panel-phrase { margin-top: 1.25rem; font-size: 0.8rem; font-style: italic; color: var(--read-muted); line-height: 1.7; }
+    .cp-panel-link { display: block; margin-top: 1.5rem; text-align: center; font-size: 0.63rem; font-family: var(--mono); letter-spacing: 0.08em; padding: 0.45rem 0.75rem; border: 1px solid var(--read-border); color: var(--read-muted); text-decoration: none; transition: color 0.12s, border-color 0.12s; }
+    .cp-panel-link:hover { color: var(--read-text); border-color: var(--read-text); text-decoration: none; }
+
+    @media (max-width: 720px) {
+      .obs-layout .obs-sidebar { display: block !important; position: fixed !important; top: var(--top-offset); left: 0; bottom: var(--status-h); width: 260px !important; min-width: 260px !important; max-height: none !important; overflow-y: auto !important; overflow-x: hidden; z-index: 90; opacity: 1 !important; padding: 1rem 0 !important; border-right: 1px solid var(--read-border) !important; transform: translateX(0) !important; transition: transform 0.25s ease !important; }
+      .obs-layout.sidebar-closed .obs-sidebar { transform: translateX(-100%) !important; }
+      .obs-layout:not(.sidebar-closed) .sidebar-backdrop { display: block; }
+      .obs-content { padding: 2rem 1.25rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../index.html" class="header-logo">After all, tomorrow is another day</a>
+  <nav>
+    <ul class="header-nav">
+      <li><a href="../characters/index.html">characters</a></li>
+      <li><a href="index.html" class="active">story</a></li>
+      <li><a href="../gallery/index.html">gallery</a></li>
+      <li><a href="../world/index.html">world</a></li>
+      <li><a href="../game/index.html">game</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="vsc-bread" style="top:56px;">
+  <a href="../index.html" class="bread-item">the fool</a>
+  <span class="bread-sep">›</span>
+  <a href="index.html" class="bread-item">story</a>
+  <span class="bread-sep">›</span>
+  <span class="bread-item" id="breadStage">—</span>
+  <span class="bread-sep" id="breadSep2" style="display:none">›</span>
+  <span class="bread-item" id="breadChapter" style="display:none">—</span>
+</div>
+
+<main class="page" style="padding-top:calc(56px + 28px);">
+<div class="obs-layout" id="layout">
+
+  <div class="sidebar-backdrop" onclick="toggleSidebar()"></div>
+
+  <aside class="obs-sidebar">
+    <div class="sidebar-section" id="sidebarChapters"></div>
+    <div class="sidebar-section" style="border-top:1px solid var(--read-border);padding-top:0.75rem;margin-top:0.5rem" id="sidebarStages"></div>
+  </aside>
+
+  <div class="obs-content">
+  <div class="reading-inner">
+
+    <div class="reader-bar">
+      <button class="sidebar-toggle" onclick="toggleSidebar()" title="toggle sidebar">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="5.5" y1="1.5" x2="5.5" y2="14.5" stroke="currentColor" stroke-width="1.2"/>
+          <rect x="2" y="2" width="3" height="12" rx="1.5" fill="currentColor" opacity="0.35"/>
+        </svg>
+      </button>
+      <div class="reader-divider"></div>
+      <span class="reader-bar-label">theme</span>
+      <button class="reader-btn"        onclick="setTheme('dark',this)">dark</button>
+      <button class="reader-btn active" onclick="setTheme('light',this)">light</button>
+      <button class="reader-btn"        onclick="setTheme('sepia',this)">sepia</button>
+      <div class="reader-divider"></div>
+      <span class="reader-bar-label">size</span>
+      <button class="reader-btn"        onclick="setSize('sm',this)">S</button>
+      <button class="reader-btn active" onclick="setSize('md',this)">M</button>
+      <button class="reader-btn"        onclick="setSize('lg',this)">L</button>
+      <button class="reader-btn"        onclick="setSize('xl',this)">XL</button>
+    </div>
+
+    <!-- stage header -->
+    <div style="margin-bottom:2.5rem" id="stageHeader">
+      <span class="chapter-meta" id="headerNum">—</span>
+      <h1 id="headerTitle">—</h1>
+      <p class="dim" style="font-size:0.82rem;margin:0.5rem 0 0" id="headerSub">—</p>
+    </div>
+
+    <!-- chapter content injected here -->
+    <div id="chapterContent"></div>
+
+    <!-- chapter nav -->
+    <div class="chapter-nav" id="chapterNav">
+      <button class="chapter-nav-link disabled" id="navPrev" onclick="navigate(-1)">
+        <span>←</span>
+        <span>
+          <span class="chapter-nav-label" id="navPrevLabel">previous</span>
+          <span id="navPrevText">—</span>
+        </span>
+      </button>
+      <button class="chapter-nav-link disabled" id="navNext" onclick="navigate(1)">
+        <span>
+          <span class="chapter-nav-label" id="navNextLabel">next chapter</span>
+          <span id="navNextText">—</span>
+        </span>
+        <span>→</span>
+      </button>
+    </div>
+
+  </div>
+  </div>
+</div>
+</main>
+
+<!-- ── CHARACTER SIDE PANEL ── -->
+<div id="charPanelBackdrop" onclick="closeCharPanel()"></div>
+<aside id="charPanel">
+  <div class="char-panel-topbar">
+    <button class="char-panel-close" onclick="closeCharPanel()">[ close ]</button>
+  </div>
+  <div id="charPanelInner"></div>
+</aside>
+
+<footer class="site-footer">
+  <div class="footer-wip">
+    <div class="wip-glow"></div>
+    <span>work in progress · last updated: <span id="lastmod"></span></span>
+  </div>
+  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
+</footer>
+
+<script src="../js/story-data.js"></script>
+<script src="../js/gallery-data.js"></script>
+<script src="../js/character-data.js"></script>
+<script>
+  /* ── HELPERS ── */
+  function getParams() {
+    const hash = location.hash.replace('#', '') || 'pro';
+    const parts = hash.split('-');
+    const id = parts[0];
+    const ch = parts[1] ? parseInt(parts[1], 10) : 1;
+    return { id, ch };
+  }
+
+  function stageUrl(id, ch) {
+    return ch === 1 ? `page.html#${id}` : `page.html#${id}-${ch}`;
+  }
+
+  /* adjacent draft stage relative to current */
+  function adjacentStage(id, dir) {
+    const draftStages = STORY_DATA.filter(s => s.status === 'draft');
+    const idx = draftStages.findIndex(s => s.id === id);
+    return draftStages[idx + dir] || null;
+  }
+
+  /* ── DYNAMIC CONTENT LOAD ── */
+  const _contentCache = {};
+
+  function loadContent(id, callback) {
+    /* return from cache if already loaded */
+    if (_contentCache[id]) {
+      window.STAGE_CONTENT = _contentCache[id];
+      callback();
+      return;
+    }
+
+    window.STAGE_CONTENT = null;
+    const script = document.createElement('script');
+    script.src = `../js/content/${id}.js`;
+    script.onload = () => {
+      _contentCache[id] = window.STAGE_CONTENT;
+      callback();
+    };
+    script.onerror = () => {
+      window.STAGE_CONTENT = [{ title: 'Not yet written', content: '<p style="color:var(--read-muted)">Content not yet available.</p>' }];
+      _contentCache[id] = window.STAGE_CONTENT;
+      callback();
+    };
+    document.head.appendChild(script);
+  }
+
+  /* ── RENDER (called after content loaded) ── */
+  function render() {
+    const { id, ch } = getParams();
+    const stageIdx = STORY_DATA.findIndex(s => s.id === id);
+    if (stageIdx === -1) return;
+
+    const stage = STORY_DATA[stageIdx];
+    const chIdx = ch - 1;
+    const chapters = window.STAGE_CONTENT || [];
+    const chapter = chapters[chIdx] || chapters[0];
+    if (!chapter) return;
+
+    const chNum = chapter.num !== undefined ? chapter.num : ch;
+
+    /* page title */
+    document.title = `${stage.num} · ${stage.title} — Ch.${chNum} — the fool`;
+
+    /* breadcrumb */
+    document.getElementById('breadStage').textContent = `${stage.num} · ${stage.title}`;
+    if (chapters.length > 1) {
+      document.getElementById('breadSep2').style.display = '';
+      document.getElementById('breadChapter').style.display = '';
+      document.getElementById('breadChapter').textContent = `Ch.${chNum} · ${chapter.title}`;
+    } else {
+      document.getElementById('breadSep2').style.display = 'none';
+      document.getElementById('breadChapter').style.display = 'none';
+    }
+
+    /* stage header */
+    document.getElementById('headerNum').textContent = stage.num;
+    document.getElementById('headerTitle').textContent = stage.title;
+    document.getElementById('headerSub').textContent = stage.sub;
+
+    /* chapter content */
+    document.getElementById('chapterContent').innerHTML =
+      `<span class="chapter-meta">Chapter ${chNum}</span>` +
+      `<h2 style="border:none;margin-top:0">${chapter.title}</h2>` +
+      chapter.content;
+
+    /* resolve gallery images — [data-gallery-id="N"] → img from GALLERY_DATA */
+    if (typeof GALLERY_DATA !== 'undefined') {
+      document.querySelectorAll('[data-gallery-id]').forEach(el => {
+        const idx = parseInt(el.dataset.galleryId, 10);
+        const item = GALLERY_DATA[idx];
+        if (item && item.src) {
+          el.innerHTML = `<img src="${item.src}" alt="${item.caption}" style="max-width:100%;display:block;">`;
+        } else if (item) {
+          el.innerHTML = `<span style="color:var(--read-muted);font-size:0.8rem">[gallery #${idx} — no image yet]</span>`;
+        }
+      });
+    }
+
+    /* sidebar — chapters */
+    let chSidebar = `<span class="sidebar-label">${stage.num} · ${stage.title}</span>`;
+    chapters.forEach((c, i) => {
+      const active = i === chIdx;
+      const n = c.num !== undefined ? c.num : i + 1;
+      chSidebar += `<a href="${stageUrl(id, i+1)}" class="sidebar-link${active ? ' active' : ''}"${active ? ' style="color:var(--link)"' : ''}>Ch.${n} · ${c.title}</a>`;
+    });
+    document.getElementById('sidebarChapters').innerHTML = chSidebar;
+
+    /* sidebar — stages */
+    let stSidebar = `<span class="sidebar-label">stages</span>`;
+    stSidebar += `<a href="index.html" class="sidebar-link">← all stages</a>`;
+    STORY_DATA.forEach(s => {
+      const isActive = s.id === id;
+      if (s.status !== 'draft') {
+        stSidebar += `<span class="sidebar-link" style="color:var(--faint);pointer-events:none;cursor:default">${s.num} · ${s.title}</span>`;
+      } else {
+        stSidebar += `<a href="${stageUrl(s.id, 1)}" class="sidebar-link${isActive ? ' active' : ''}"${isActive ? ' style="color:var(--link)"' : ''}>${s.num} · ${s.title}</a>`;
+      }
+    });
+    document.getElementById('sidebarStages').innerHTML = stSidebar;
+
+    /* prev / next */
+    const prevEl = document.getElementById('navPrev');
+    const nextEl = document.getElementById('navNext');
+
+    if (chIdx > 0) {
+      /* prev chapter within same stage */
+      const pc = chapters[chIdx - 1];
+      const pn = pc && pc.num !== undefined ? pc.num : chIdx;
+      prevEl.classList.remove('disabled');
+      document.getElementById('navPrevLabel').textContent = 'previous chapter';
+      document.getElementById('navPrevText').textContent = `Ch.${pn} · ${pc ? pc.title : ''}`;
+    } else {
+      const ps = adjacentStage(id, -1);
+      if (ps) {
+        prevEl.classList.remove('disabled');
+        document.getElementById('navPrevLabel').textContent = 'previous stage';
+        document.getElementById('navPrevText').textContent = `${ps.num} · ${ps.title}`;
+      } else {
+        prevEl.classList.add('disabled');
+        document.getElementById('navPrevText').textContent = 'none';
+      }
+    }
+
+    if (chIdx < chapters.length - 1) {
+      /* next chapter within same stage */
+      const nc = chapters[chIdx + 1];
+      const nn = nc && nc.num !== undefined ? nc.num : chIdx + 2;
+      nextEl.classList.remove('disabled');
+      document.getElementById('navNextLabel').textContent = 'next chapter';
+      document.getElementById('navNextText').textContent = `Ch.${nn} · ${nc ? nc.title : ''}`;
+    } else {
+      const ns = adjacentStage(id, 1);
+      if (ns) {
+        nextEl.classList.remove('disabled');
+        document.getElementById('navNextLabel').textContent = 'next stage';
+        document.getElementById('navNextText').textContent = `${ns.num} · ${ns.title}`;
+      } else {
+        nextEl.classList.add('disabled');
+        document.getElementById('navNextText').textContent = 'none';
+      }
+    }
+
+    window.scrollTo(0, 0);
+    processContent();
+  }
+
+  /* ── NAV BUTTON ── */
+  function navigate(dir) {
+    const { id, ch } = getParams();
+    const chIdx = ch - 1;
+    const chapters = window.STAGE_CONTENT || [];
+
+    if (dir === 1 && chIdx < chapters.length - 1) {
+      location.hash = stageUrl(id, ch + 1).split('#')[1];
+    } else if (dir === -1 && chIdx > 0) {
+      location.hash = stageUrl(id, ch - 1).split('#')[1];
+    } else {
+      const adj = adjacentStage(id, dir);
+      if (adj) location.hash = adj.id;
+    }
+  }
+
+  /* ── THEME / SIZE / SIDEBAR ── */
+  function setTheme(theme, btn) {
+    document.documentElement.dataset.theme = theme;
+    document.querySelectorAll('.reader-btn').forEach(b => {
+      if (['dark','light','sepia'].includes(b.textContent.trim())) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+  }
+
+  function setSize(size, btn) {
+    document.documentElement.dataset.size = size;
+    document.querySelectorAll('.reader-btn').forEach(b => {
+      if (['S','M','L','XL'].includes(b.textContent.trim())) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+  }
+
+  function toggleSidebar() {
+    document.getElementById('layout').classList.toggle('sidebar-closed');
+  }
+
+  /* ── CONTENT PROCESSING ── */
+  function processContent() {
+    if (typeof CHARACTER_DATA === 'undefined') return;
+    const content = document.getElementById('chapterContent');
+    if (!content) return;
+
+    /* 1. wrap character names in text nodes */
+    wrapNames(content);
+  }
+
+  function wrapNames(container) {
+    const entries = Object.entries(CHARACTER_DATA);
+    if (!entries.length) return;
+
+    /* build list of [displayName, charId], longest first to avoid partial matches */
+    const variants = [];
+    entries.forEach(([id, char]) => {
+      variants.push([char.name, id]);
+      (char.aliases || []).forEach(a => variants.push([a, id]));
+    });
+    variants.sort((a, b) => b[0].length - a[0].length);
+
+    const escaped = variants.map(([n]) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const regex   = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'g');
+    const idMap   = Object.fromEntries(variants);
+
+    /* collect text nodes, skip already-wrapped and non-prose elements */
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
+    const nodes = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      const p = node.parentElement;
+      if (!p) continue;
+      const tag = p.tagName;
+      if (tag === 'SCRIPT' || tag === 'STYLE') continue;
+      if (p.classList.contains('char-mention')) continue;
+      regex.lastIndex = 0;
+      if (regex.test(node.textContent)) nodes.push(node);
+    }
+
+    /* replace each text node with a fragment containing wrapped spans */
+    nodes.forEach(n => {
+      regex.lastIndex = 0;
+      const frag = document.createDocumentFragment();
+      let last = 0, m;
+      while ((m = regex.exec(n.textContent)) !== null) {
+        if (m.index > last) frag.appendChild(document.createTextNode(n.textContent.slice(last, m.index)));
+        const id   = idMap[m[0]];
+        const char = CHARACTER_DATA[id];
+        const span = document.createElement('span');
+        span.className = 'char-mention';
+        span.dataset.char = id;
+        span.textContent = m[0];
+        span.onclick = () => openCharPanel(id);
+        frag.appendChild(span);
+        last = m.index + m[0].length;
+      }
+      if (last < n.textContent.length) frag.appendChild(document.createTextNode(n.textContent.slice(last)));
+      n.parentNode.replaceChild(frag, n);
+    });
+  }
+
+  /* ── CHARACTER PANEL ── */
+  function openCharPanel(id) {
+    const char = CHARACTER_DATA[id];
+    if (!char) return;
+
+    const fields = ['age', 'gender', 'rank']
+      .filter(k => char[k] && char[k] !== '—');
+
+    const portrait = char.portrait
+      ? `<img src="${char.portrait}" alt="${char.name}" />`
+      : `<span class="cp-portrait-ph">no image</span>`;
+
+    const paletteCol = `<div class="cp-pal-v">` +
+      (char.palette && char.palette.length
+        ? char.palette.map(c => `<span style="background:${c}"></span>`).join('')
+        : `<span style="background:var(--read-block)"></span>`) +
+      `</div>`;
+
+    document.getElementById('charPanelInner').innerHTML =
+      `<div class="cp-header">` +
+        paletteCol +
+        `<div class="cp-info">` +
+          `<div class="cp-panel-name">${char.name}</div>` +
+          `<div class="cp-panel-sub">${char.tag || ''}</div>` +
+        `</div>` +
+        `<div class="cp-portrait">${portrait}</div>` +
+      `</div>` +
+      fields.map(k => `<div class="cp-panel-row"><span class="cp-panel-key">${k}</span><span class="cp-panel-val">${char[k]}</span></div>`).join('') +
+      (char.notes ? `<p class="cp-panel-phrase">${char.notes}</p>` : '') +
+      `<a href="${char.href || '../characters/index.html'}" target="_blank" class="cp-panel-link">view character page ↗</a>`;
+
+    document.getElementById('charPanel').classList.add('open');
+    document.getElementById('charPanelBackdrop').classList.add('open');
+  }
+
+  function closeCharPanel() {
+    document.getElementById('charPanel').classList.remove('open');
+    document.getElementById('charPanelBackdrop').classList.remove('open');
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCharPanel(); });
+
+  /* ── INIT ── */
+  let currentStageId = null;
+
+  function init() {
+    const { id } = getParams();
+    if (id !== currentStageId) {
+      currentStageId = id;
+      loadContent(id, render);
+    } else {
+      render();
+    }
+  }
+
+  window.addEventListener('hashchange', init);
+  init();
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const d = new Date(document.lastModified);
+  const pad = n => String(n).padStart(2, '0');
+  document.getElementById('lastmod').textContent =
+    d.getFullYear() + ' ' +
+    d.toLocaleString('en', { month: 'short' }).toLowerCase() + ' ' +
+    pad(d.getDate()) + ' ' +
+    pad(d.getHours()) + ':' + pad(d.getMinutes());
+</script>
+</body>
+</html>
