@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Antiphonus</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/nav.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -122,57 +124,53 @@
        SWIPE
     ───────────────────────────────────────── */
     #swipe {
-      position: fixed; inset: 0; z-index: 400;
-      background: #fff;
+      position: fixed; inset: 0; z-index: 520;
+      background: #000;
       transform: translateX(-100%);
       pointer-events: none;
     }
 
-    #swipe.in  { animation: sw-in  0.38s cubic-bezier(0.77,0,0.18,1) forwards; }
-    #swipe.out { animation: sw-out 0.48s cubic-bezier(0.77,0,0.18,1) forwards; }
+    #swipe::before, #swipe::after {
+      content: ''; position: absolute; inset: 0; opacity: 0;
+      background: #fff;
+    }
 
-    @keyframes sw-in  { to { transform: translateX(0); } }
+    #swipe.in  { animation: sw-in  0.08s steps(1) forwards; }
+    #swipe.out { animation: sw-out 0.35s cubic-bezier(0.86,0,0.07,1) 0.36s both; }
+
+    #swipe.out::before { animation: glitch-slice-a 0.36s steps(1) forwards; }
+    #swipe.out::after  { animation: glitch-slice-b 0.36s steps(1) forwards; }
+
+    @keyframes sw-in  { to   { transform: translateX(0); } }
     @keyframes sw-out { from { transform: translateX(0); } to { transform: translateX(100%); } }
 
+    @keyframes glitch-slice-a {
+      0%,100%  { opacity:0; }
+      20%      { opacity:1; clip-path:inset(22% 0 71% 0); transform:translateX(20px); }
+      28%      { opacity:1; clip-path:inset(22% 0 71% 0); transform:translateX(20px); }
+      29%      { opacity:0; }
+    }
+    @keyframes glitch-slice-b {
+      0%,100%  { opacity:0; }
+      55%      { opacity:1; clip-path:inset(64% 0 16% 0); transform:translateX(-16px); }
+      63%      { opacity:1; clip-path:inset(64% 0 16% 0); transform:translateX(-16px); }
+      64%      { opacity:0; }
+    }
+
     /* ─────────────────────────────────────────
-       TOP NAV
+       TOP NAV  (landing-page overrides only)
     ───────────────────────────────────────── */
     #topnav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      height: 56px;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 2.5rem;
-      background: rgba(245,245,245,0.7);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+      z-index: 200;
       opacity: 0; pointer-events: none;
       transition: opacity 0.5s 0.1s;
+      border-bottom: none;
     }
 
     #topnav.show { opacity: 1; pointer-events: all; }
 
-    .nav-logo {
-      font-size: 0.75rem;
-      color: #5a5a5a;
-      text-decoration: none;
-      letter-spacing: 0.07em;
-      white-space: nowrap;
-    }
+    #topnav::before { display: none; }
 
-    .nav-logo:hover { color: #1a1a1a; }
-
-    .nav-ul { display: flex; gap: 2rem; list-style: none; }
-
-    .nav-ul a {
-      font-size: 0.78rem;
-      color: #5a5a5a;
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      transition: color 0.12s;
-    }
-
-    .nav-ul a:hover { color: #1a1a1a; }
 
     /* ─────────────────────────────────────────
        CHARACTER BG (fixed)
@@ -395,11 +393,20 @@
       margin-bottom: 1.5rem;
     }
 
+
     .divider {
       border: none;
       border-top: 1px solid #e0e0e0;
       max-width: 860px;
       margin: 0 auto;
+    }
+
+    .halftone-gap {
+      height: 300px;
+      background-color: #2a2a2a;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 10px 10px;
+      background-attachment: fixed;
     }
 
     .nav-grid {
@@ -427,27 +434,8 @@
     .nc-title { font-size: 0.9rem; color: #1a1a1a; font-weight: 600; margin-bottom: 0.3rem; }
     .nc-sub   { font-size: 0.72rem; color: #5a5a5a; line-height: 1.5; }
 
-    footer {
-      border-top: 1px solid #e0e0e0;
-      padding: 0.75rem 2.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: 0.7rem; color: #b0b0b0;
-      flex-wrap: wrap; gap: 0.5rem;
-    }
-
-    .f-wip { display: flex; align-items: center; gap: 0.6rem; }
-
-    .wip-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #e8a94a; flex-shrink: 0;
-      animation: breathe 2.4s ease-in-out infinite;
-    }
-
-    @keyframes breathe { 0%,100%{opacity:0.3} 50%{opacity:1} }
 
     @media (max-width: 640px) {
-      #topnav { padding: 0 1.25rem; }
-      .nav-ul { gap: 1.25rem; }
       .section { padding: 4rem 1.25rem; }
     }
   </style>
@@ -483,16 +471,17 @@
 <div id="swipe"></div>
 
 <!-- ── NAV ── -->
-<nav id="topnav">
-  <a href="index.html" class="nav-logo">After all, tomorrow is another day</a>
-  <ul class="nav-ul">
-    <li><a href="characters/index.html">characters</a></li>
+<header id="topnav" class="site-header">
+  <a href="index.html" class="header-logo">After all, tomorrow is another day</a>
+  <nav><ul class="header-nav">
+    <li><a href="index.html" class="active">overview</a></li>
+    <li><a href="game/index.html">game</a></li>
     <li><a href="story/page.html">story</a></li>
     <li><a href="gallery/index.html">gallery</a></li>
     <li><a href="world/index.html">world</a></li>
-    <li><a href="game/index.html">game</a></li>
-  </ul>
-</nav>
+  </ul></nav>
+  <span class="nav-indicator" id="topnav-indicator"></span>
+</header>
 
 <!-- ── CHARACTER BG ── -->
 <div id="char-bg">
@@ -533,7 +522,10 @@
         <div class="door">
           <span class="door-label">game</span>
           <span class="door-sub">experience the world yourself</span>
-          <p class="door-body">Death was supposed to be the end.<br><br>Instead, you awaken in a fractured world shared by thousands of others who should have died. The only promise anyone can offer is simple: clear all twenty-two stages and you may return home. Between each trial lies a city of survivors, merchants, and wanderers—all waiting to see who will make it to the end.</p>
+          <p class="door-body">
+          Death was supposed to be the end.<br><br>
+          Instead, you awaken in a world shared by thousands of others who should have died. Beyond the city walls lie dangerous stages, forgotten secrets, and a path few ever survive.
+          </p>         
           <div class="door-btns">
             <a href="game/index.html" class="btn-door">[ Play the Game ]</a>
           </div>
@@ -554,77 +546,19 @@
       </div>
     </section>
 
-    <hr class="divider" />
+    <div class="halftone-gap"></div>
 
     <section class="section">
       <span class="s-label">premise</span>
       <h2 class="s-heading">A Game for the Dead</h2>
       <p class="s-body">
-        Some call this place hell. They're wrong. Hell implies punishment, judgment, a sentence handed down by something greater than you. But this world offers none of those things. No one is chosen. No one is spared. No one is owed a future. Everyone arrives the same way: dead, lost, and given one impossible gift—a second chance. What happens next is yours alone.
+        Some call this place hell. They're wrong. Hell implies punishment, judgment, a sentence handed down by something greater than you. But this world offers none of those things. No one is chosen. No one is spared. No one is owed a future. Everyone arrives the same way: dead, lost, and given one gift—a second chance. What happens next is yours alone.
       </p>
       <p class="s-body">
-        Welcome to The Fool. The card of beginnings. Of innocence. Of reckless faith. The step taken before the path reveals itself. The fall before you learn whether you can fly.
+        Welcome to The Fool. The card of beginnings. Of innocence. Of reckless faith.
       </p>
     </section>
 
-    <hr class="divider" />
-
-    <section class="section">
-      <span class="s-label">explore</span>
-      <h2 class="s-heading">Database</h2>
-      <p class="s-body">Everything you need to understand this world.</p>
-
-      <div class="nav-grid">
-        <a href="characters/index.html" class="nav-card">
-          <div class="nc-label">characters</div>
-          <div class="nc-title">Anti &amp; Nyx</div>
-          <div class="nc-sub">Reference sheets, stats, and dynamics</div>
-        </a>
-        <a href="gallery/index.html" class="nav-card">
-          <div class="nc-label">gallery</div>
-          <div class="nc-title">Concept Art</div>
-          <div class="nc-sub">Illustrations and visual reference</div>
-        </a>
-        <a href="world/index.html" class="nav-card wip">
-          <div class="nc-label">world · overview</div>
-          <div class="nc-title">The Game</div>
-          <div class="nc-sub">What this world is and how it works</div>
-        </a>
-        <a href="world/history.html" class="nav-card wip">
-          <div class="nc-label">world · history</div>
-          <div class="nc-title">History</div>
-          <div class="nc-sub">Origins, timeline, and what came before</div>
-        </a>
-        <a href="world/politics.html" class="nav-card wip">
-          <div class="nc-label">world · politics</div>
-          <div class="nc-title">Political System</div>
-          <div class="nc-sub">Factions, power, and who controls what</div>
-        </a>
-        <a href="world/cities.html" class="nav-card wip">
-          <div class="nc-label">world · geography</div>
-          <div class="nc-title">The Four Cities</div>
-          <div class="nc-sub">Where people live between stages</div>
-        </a>
-        <a href="world/economy.html" class="nav-card wip">
-          <div class="nc-label">world · economy</div>
-          <div class="nc-title">Time &amp; Currency</div>
-          <div class="nc-sub">How value, trade, and survival work</div>
-        </a>
-        <a href="world/lore.html" class="nav-card wip">
-          <div class="nc-label">world · lore</div>
-          <div class="nc-title">Lore</div>
-          <div class="nc-sub">Myths, secrets, and unanswered questions</div>
-        </a>
-      </div>
-    </section>
-
-    <footer>
-      <div class="f-wip">
-        <div class="wip-dot"></div>
-        <span>work in progress · last updated: <span id="lastmod"></span></span>
-      </div>
-      <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
-    </footer>
 
   </div>
 </div>
@@ -801,6 +735,7 @@
       $('char-bg').classList.add('show');
       $('site').classList.add('show');
       $('topnav').classList.add('show');
+      requestAnimationFrame(function () { if (_navMoveActive) _navMoveActive(); });
       document.body.classList.remove('locked');
       sessionStorage.setItem('booted', '1');
       attachHeroFade();
@@ -823,14 +758,53 @@
     }, { passive: true });
   }
 
-  // ── FOOTER ──
-  $('yr').textContent = new Date().getFullYear();
-  const d = new Date(document.lastModified);
-  $('lastmod').textContent =
-    d.getFullYear() + ' ' +
-    d.toLocaleString('en', { month: 'short' }).toLowerCase() + ' ' +
-    String(d.getDate()).padStart(2, '0');
+  // ── TOPNAV INDICATOR ──
+  var _navMoveActive;
+  (function () {
+    var nav       = document.getElementById('topnav');
+    var indicator = document.getElementById('topnav-indicator');
+    var links     = nav.querySelectorAll('.header-nav a');
+    var active    = nav.querySelector('.header-nav a.active');
+    var cur = { left: 0, width: 0 };
+    var timer;
 
+    function setInstant(left, width) {
+      indicator.style.transition = 'none';
+      indicator.style.left  = left + 'px';
+      indicator.style.width = width + 'px';
+      indicator.style.opacity = '1';
+      cur.left  = left;
+      cur.width = width;
+    }
+
+    function move(link) {
+      if (!link) { indicator.style.opacity = '0'; return; }
+      var nr = nav.getBoundingClientRect();
+      var lr = link.getBoundingClientRect();
+      var tLeft  = lr.left - nr.left;
+      var tWidth = lr.width;
+
+      clearTimeout(timer);
+      indicator.style.transition = 'left 0.15s ease-out, width 0.12s ease-out, opacity 0.12s';
+      indicator.style.opacity = '1';
+      indicator.style.left  = tLeft + 'px';
+      indicator.style.width = tWidth + 'px';
+      cur.left  = tLeft;
+      cur.width = tWidth;
+    }
+
+    _navMoveActive = function () {
+      if (!active) return;
+      var nr = nav.getBoundingClientRect();
+      var lr = active.getBoundingClientRect();
+      setInstant(lr.left - nr.left, lr.width);
+    };
+
+    links.forEach(function (a) { a.addEventListener('mouseenter', function () { move(a); }); });
+    nav.querySelector('.header-nav').addEventListener('mouseleave', function () { move(active); });
+  })();
+
+  injectFooter(document.getElementById('site'));
   boot();
 </script>
 </body>

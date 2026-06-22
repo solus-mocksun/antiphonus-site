@@ -479,21 +479,9 @@
 <body>
 
 <!-- ── HEADER ── -->
-<header class="site-header">
-  <a href="../index.html" class="header-logo">After all, tomorrow is another day</a>
-  <nav>
-    <ul class="header-nav">
-      <li><a href="../characters/index.html" class="active">characters</a></li>
-      <li><a href="../story/index.html">story</a></li>
-      <li><a href="../gallery/index.html">gallery</a></li>
-      <li><a href="../world/index.html">world</a></li>
-      <li><a href="../game/index.html">game</a></li>
-    </ul>
-  </nav>
-</header>
 
 <!-- ── BREADCRUMB ── -->
-<div class="vsc-bread" style="top:56px;">
+<div class="vsc-bread" style="top:var(--header-h);">
   <a href="../index.html" class="bread-item">the fool</a>
   <span class="bread-sep">›</span>
   <a href="../characters/index.html" class="bread-item">characters</a>
@@ -501,7 +489,7 @@
   <span class="bread-item">supporting cast</span>
 </div>
 
-<main class="page" style="padding-top:calc(56px + 28px);">
+<main class="page" style="padding-top:calc(var(--header-h) + 28px);">
 <div class="wrap" style="padding-top:1.5rem;">
 
   <div class="inner-tabs">
@@ -790,13 +778,7 @@
 </div>
 
 <!-- ── FOOTER ── -->
-<footer class="site-footer">
-  <div class="footer-wip">
-    <div class="wip-glow"></div>
-    <span>work in progress · last updated: <span id="lastmod"></span></span>
-  </div>
-  <span>© All rights reserved. 2023–<span id="yr"></span> / solus.mocksun</span>
-</footer>
+
 
 <script src="../js/gallery-data.js"></script>
 <script>
@@ -912,14 +894,10 @@
   }
 
   /* ── FOOTER ── */
-  document.getElementById('yr').textContent = new Date().getFullYear();
-  const d = new Date(document.lastModified);
-  const pad = n => String(n).padStart(2, '0');
-  document.getElementById('lastmod').textContent =
-    d.getFullYear() + ' ' +
-    d.toLocaleString('en', { month: 'short' }).toLowerCase() + ' ' +
-    pad(d.getDate()) + ' ' +
-    pad(d.getHours()) + ':' + pad(d.getMinutes());
 </script>
+
+<script src="../js/nav.js"></script>
+<script>injectNav('characters', '../');</script>
+  <script>injectFooter();</script>
 </body>
 </html>
